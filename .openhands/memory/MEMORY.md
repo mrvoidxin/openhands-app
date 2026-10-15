@@ -14,7 +14,8 @@ packaged for Android with Capacitor. The repo now tracks `OpenHands-main/`
 https://github.com/mrvoidxin/opanhand-mobile-/releases/latest/download/app-release.apk
 (+ `app-debug.apk`), release tag `v1.27.1`. CI workflow at the **repo root**
 (`.github/workflows/build-android-apk.yml`) builds the APKs and attaches them to
-the release on a `v*` tag. Full gotchas in `2026-10-15.md`.
+the release on a `v*` tag. The repo home page (README) documents download,
+install, build-from-source, and CI. Full gotchas in `2026-10-15.md`.
 
 Android APK build recipe, gotchas and artifact hashes: `2026-10-15.md`.
 Highlights: JDK 21 via apt; Android SDK cmdline-tools in
@@ -52,3 +53,5 @@ so the app shows its own backend setup screen; `signingConfigs` must precede
   works** — saved at `~/.gh_pat` (chmod 600). Use it via a git credential helper
   reading the file, never inline on the command line. If a push is denied,
   check whether the old token is embedded in the remote URL.
+- **`.openhands/memory/` is tracked in git**, so switching branches
+  (`git checkout -B x origin/main`) reverts uncommitted memory edits.

@@ -24,11 +24,28 @@ for what can and cannot be tested that way.
 
 **Permanent download links (GitHub Releases, never goes down):**
 https://github.com/mrvoidxin/openhands-mobile/releases/latest/download/app-release.apk
-— release tag `v1.27.2`. The debug APK is **no longer published** (it is a
-debuggable build); it only exists as a CI artifact. CI workflow at the **repo
-root** (`.github/workflows/build-android-apk.yml`) builds the APK and attaches it
-to the release on a `v*` tag. The repo home page (README) documents download,
-install, build-from-source, and CI. Full gotchas in `2026-10-15.md`.
+— release tag `v1.27.3` (current). The debug APK is **no longer published** (it
+is a debuggable build); it only exists as a CI artifact. CI workflow at the
+**repo root** (`.github/workflows/build-android-apk.yml`) builds the APK and
+attaches it to the release on a `v*` tag. The repo home page (README) documents
+download, install, build-from-source, and CI. Full gotchas in `2026-10-15.md`.
+
+**The `apksigner` PATH trap (cost a whole release cycle):** apksigner is a shell
+wrapper that `exec java`, so a CI step must `export PATH="$JAVA_HOME/bin:$PATH"`
+before calling it. Without that the wrapper dies silently, `grep -q "Signer #1"`
+matches nothing, and the workflow labels a perfectly signed release "NOT signed".
+The verify step now exports PATH, falls back to `keytool -printcert -jarfile`,
+and hard-fails when the keystore was restored but the APK is unsigned. To check
+signedness locally with no JDK: `META-INF/CERT.RSA` in the zip plus the
+`APK Sig Block 42` magic prove v1+v2; `openssl pkcs7 -print_certs` + `openssl
+x509 -fingerprint -sha256` print the signer fingerprint.
+
+**Official branding:** every launcher icon (legacy/adaptive/round, mdpi..xxxhdpi)
+and all 11 splash screens come from the official mark
+(`public/android-chrome-512x512.png`) via `tools/make_android_icons.py`; the
+landing page/README carry a Credits section, and `docs/assets/og-preview.png`
+(1200x630, `tools/make_og_image.py`) is the WhatsApp/OG preview. `cap sync` does
+not overwrite `android/app/src/main/res`, so icons survive CI.
 
 ### Signing (do not regress this)
 The keystore and its password were **committed publicly** (`android/app/
@@ -71,6 +88,12 @@ so the app shows its own backend setup screen; `signingConfigs` must precede
 (`android/app/release.keystore`); run gradle with `nohup ... &` and poll.
 
 ## Environment (reusable, expensive to rediscover)
+- **Sandbox restarts wipe `/tmp` but keep `/workspace`.** A PAT parked in `/tmp`
+  is gone after a wake, and so is an apt-installed JDK (`/usr/lib/jvm/java-21-*`
+  vanished), which breaks local gradle/apksigner until reinstalled. Prefer
+  `/workspace` for anything durable, and verify signatures with openssl/Python
+  when no JDK is present. The classic PAT is recovered from
+  `/workspace/conversations/<id>/events/*.json` (`grep -l ghp_`).
 - **No `/dev/kvm`** -> the Android emulator is unusable; verify by build +
   `aapt dump badging` / `apksigner verify` + serving the web bundle in the
   browser.

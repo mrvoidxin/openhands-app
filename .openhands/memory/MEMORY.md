@@ -10,6 +10,12 @@ OpenHands Agent Canvas React/TS frontend (`@openhands/agent-canvas` v1.27.1)
 packaged for Android with Capacitor. The repo now tracks `OpenHands-main/`
 (source + the generated `android/` project) so CI can build it.
 
+**Repo was renamed** from `opanhand-mobile-` (typo) to `openhands-mobile`; the
+local folder matches. Old URLs 301-redirect. Repo `homepage` + topics are set;
+GitHub Pages serves `docs/` at https://mrvoidxin.github.io/openhands-mobile/ .
+**IzzyOnDroid is a dead end** (their policy rejects LLM front-ends) — distribute
+via GitHub Releases + an Obtainium badge instead. Details in `2026-10-15.md`.
+
 **Permanent download links (GitHub Releases, never goes down):**
 https://github.com/mrvoidxin/openhands-mobile/releases/latest/download/app-release.apk
 (+ `app-debug.apk`), release tag `v1.27.1`. CI workflow at the **repo root**

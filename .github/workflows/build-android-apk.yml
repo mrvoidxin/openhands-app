@@ -101,6 +101,8 @@ jobs:
 
       - name: Verify the release APK
         working-directory: OpenHands-main/android
+        env:
+          KEYSTORE_WAS_RESTORED: ${{ steps.keystore.outputs.signed }}
         run: |
           APK=$(ls app/build/outputs/apk/release/*.apk 2>/dev/null | head -1)
           if [ -z "$APK" ]; then
@@ -108,18 +110,38 @@ jobs:
             exit 1
           fi
           echo "apk: $APK"
-          APKSIGNER=$(ls "$ANDROID_HOME"/build-tools/*/apksigner 2>/dev/null | tail -1 || true)
+
+          # apksigner is a shell wrapper that execs `java`, so the JDK has to be
+          # on PATH - JAVA_HOME alone is not enough and the check silently fails.
+          export PATH="$JAVA_HOME/bin:$PATH"
+
           AAPT=$(ls "$ANDROID_HOME"/build-tools/*/aapt2 2>/dev/null | tail -1 || true)
+          APKSIGNER=$(ls "$ANDROID_HOME"/build-tools/*/apksigner 2>/dev/null | tail -1 || true)
+
           if [ -n "$AAPT" ]; then
             "$AAPT" dump badging "$APK" 2>/dev/null | grep -E "^package" || true
           fi
+
+          certs=""
           if [ -n "$APKSIGNER" ]; then
-            if "$APKSIGNER" verify --print-certs "$APK" 2>/dev/null | grep -q "Signer #1"; then
-              "$APKSIGNER" verify --print-certs "$APK" | grep -E "Signer #1 certificate (DN|SHA-256)"
-            else
-              echo "::warning::release APK is NOT signed (no keystore secret) - not publishable"
-            fi
+            certs=$("$APKSIGNER" verify --print-certs "$APK" 2>&1 || true)
           fi
+          if ! printf '%s' "$certs" | grep -q "Signer #1"; then
+            # keytool also reads a v1-signed APK, so use it as a fallback.
+            certs=$(keytool -printcert -jarfile "$APK" 2>&1 || true)
+          fi
+          printf '%s\n' "$certs" |
+            grep -E "Signer #1 certificate (DN|SHA-256)|^Certificate fingerprints|SHA256:" || true
+
+          if printf '%s' "$certs" | grep -qE "Signer #1 certificate|SHA256:"; then
+            echo "release APK is signed"
+          elif [ "$KEYSTORE_WAS_RESTORED" = "true" ]; then
+            echo "::error::the keystore was restored but the release APK is not signed"
+            exit 1
+          else
+            echo "::warning::release APK is UNSIGNED (no keystore secret) - not publishable"
+          fi
+
           sha256sum "$APK"
           ls -l "$APK"
 

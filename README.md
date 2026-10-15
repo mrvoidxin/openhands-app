@@ -59,9 +59,9 @@ The release APK is signed. You can confirm you have the exact file:
 
 ```
 File:    app-release.apk
-Size:    6,257,708 bytes
-MD5:     dd38fa75570d49bcb9e714bbdf8c4169
-SHA-256: f7a5805bc588370c7f4aa858ff8721f931ba67c611a282186ca8b0754c460613
+Size:    6,456,583 bytes
+MD5:     2047bfcc1cad3b81a1102652fc3d323d
+SHA-256: 5640e965f98712bc4967c576e242af250b3f066a80ec693bc346511ce3fcbf62
 Package: dev.openhands.agentcanvas
 Signer:  SHA-256 0D:96:FA:45:8C:34:42:D2:28:AC:C8:56:97:04:10:4A:4E:83:44:3A:68:0E:DF:81:C6:AE:0D:D1:6D:DA:81:12
 ```

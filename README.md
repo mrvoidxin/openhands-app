@@ -6,10 +6,10 @@
 
 Run and supervise your AI coding agents from your phone.
 
-[![Download APK](https://img.shields.io/badge/Download-APK-6c5ce7?style=for-the-badge&logo=android&logoColor=white)](https://github.com/mrvoidxin/opanhand-mobile-/releases/latest/download/app-release.apk)
-[![Version](https://img.shields.io/badge/version-1.27.1-blue?style=for-the-badge)](https://github.com/mrvoidxin/opanhand-mobile-/releases/tag/v1.27.1)
-[![Build](https://github.com/mrvoidxin/opanhand-mobile-/actions/workflows/build-android-apk.yml/badge.svg)](https://github.com/mrvoidxin/opanhand-mobile-/actions/workflows/build-android-apk.yml)
-[![License: MIT](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)](https://github.com/mrvoidxin/opanhand-mobile-/blob/main/OpenHands-main/LICENSE)
+[![Download APK](https://img.shields.io/badge/Download-APK-6c5ce7?style=for-the-badge&logo=android&logoColor=white)](https://github.com/mrvoidxin/openhands-mobile/releases/latest/download/app-release.apk)
+[![Version](https://img.shields.io/badge/version-1.27.1-blue?style=for-the-badge)](https://github.com/mrvoidxin/openhands-mobile/releases/tag/v1.27.1)
+[![Build](https://github.com/mrvoidxin/openhands-mobile/actions/workflows/build-android-apk.yml/badge.svg)](https://github.com/mrvoidxin/openhands-mobile/actions/workflows/build-android-apk.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)](https://github.com/mrvoidxin/openhands-mobile/blob/main/OpenHands-main/LICENSE)
 [![Support via UPI](https://img.shields.io/badge/Support-UPI-ff9f1c?style=for-the-badge&logo=buymeacoffee&logoColor=white)](#support-this-project)
 
 </div>
@@ -22,10 +22,10 @@ Run and supervise your AI coding agents from your phone.
 
 | Build | Size | Link |
 | --- | --- | --- |
-| **Release (recommended)** | 6.0 MB | **[app-release.apk](https://github.com/mrvoidxin/opanhand-mobile-/releases/latest/download/app-release.apk)** |
-| Debug (verbose logs) | 7.4 MB | [app-debug.apk](https://github.com/mrvoidxin/opanhand-mobile-/releases/latest/download/app-debug.apk) |
+| **Release (recommended)** | 6.0 MB | **[app-release.apk](https://github.com/mrvoidxin/openhands-mobile/releases/latest/download/app-release.apk)** |
+| Debug (verbose logs) | 7.4 MB | [app-debug.apk](https://github.com/mrvoidxin/openhands-mobile/releases/latest/download/app-debug.apk) |
 
-All builds: [Releases page](https://github.com/mrvoidxin/opanhand-mobile-/releases)
+All builds: [Releases page](https://github.com/mrvoidxin/openhands-mobile/releases)
 
 ### Verify your download
 
@@ -79,7 +79,7 @@ backend, and it does not send your data anywhere by itself.
 
 ## Install
 
-1. On your phone, open the [download link](https://github.com/mrvoidxin/opanhand-mobile-/releases/latest/download/app-release.apk).
+1. On your phone, open the [download link](https://github.com/mrvoidxin/openhands-mobile/releases/latest/download/app-release.apk).
 2. If Android asks, allow **install from unknown sources** for your browser or
    file manager. (Settings → Apps → Special access → Install unknown apps.)
 3. Open the downloaded APK and tap **Install**.
@@ -130,8 +130,8 @@ You need Node.js 24+, JDK 21, and the Android SDK.
 
 ```bash
 # 1. Get the code
-git clone https://github.com/mrvoidxin/opanhand-mobile-.git
-cd opanhand-mobile-/OpenHands-main
+git clone https://github.com/mrvoidxin/openhands-mobile.git
+cd openhands-mobile/OpenHands-main
 
 # 2. Install dependencies
 npm ci
@@ -250,7 +250,7 @@ Not everyone can or should send money. These help just as much:
 
 - **Star this repository** so more people can find it.
 - **Report a bug** or suggest an improvement in
-  [Issues](https://github.com/mrvoidxin/opanhand-mobile-/issues).
+  [Issues](https://github.com/mrvoidxin/openhands-mobile/issues).
 - **Tell someone** who would find a mobile OpenHands client useful.
 - **Contribute** a fix or a feature through a pull request.
 
@@ -272,7 +272,7 @@ This project is not affiliated with or endorsed by the OpenHands team.
 
 <div align="center">
 
-**[Download the latest APK](https://github.com/mrvoidxin/opanhand-mobile-/releases/latest/download/app-release.apk)**
+**[Download the latest APK](https://github.com/mrvoidxin/openhands-mobile/releases/latest/download/app-release.apk)**
 
 If it helped you, you can [buy me a chai ☕](#support-this-project) — but only if you want to.
 

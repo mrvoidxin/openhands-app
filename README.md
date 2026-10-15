@@ -7,6 +7,7 @@
 Run and supervise your AI coding agents from your phone.
 
 [![Download APK](https://img.shields.io/badge/Download-APK-6c5ce7?style=for-the-badge&logo=android&logoColor=white)](https://github.com/mrvoidxin/openhands-mobile/releases/latest/download/app-release.apk)
+[![Website](https://img.shields.io/badge/Website-openhands--mobile-FF6A3D?style=for-the-badge&logo=githubpages&logoColor=white)](https://mrvoidxin.github.io/openhands-mobile/)
 [![Version](https://img.shields.io/badge/version-1.27.1-blue?style=for-the-badge)](https://github.com/mrvoidxin/openhands-mobile/releases/tag/v1.27.1)
 [![Build](https://github.com/mrvoidxin/openhands-mobile/actions/workflows/build-android-apk.yml/badge.svg)](https://github.com/mrvoidxin/openhands-mobile/actions/workflows/build-android-apk.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)](https://github.com/mrvoidxin/openhands-mobile/blob/main/OpenHands-main/LICENSE)
@@ -26,6 +27,9 @@ Run and supervise your AI coding agents from your phone.
 | Debug (verbose logs) | 7.4 MB | [app-debug.apk](https://github.com/mrvoidxin/openhands-mobile/releases/latest/download/app-debug.apk) |
 
 All builds: [Releases page](https://github.com/mrvoidxin/openhands-mobile/releases)
+
+There is also a landing page with install steps and checksums:
+**<https://mrvoidxin.github.io/openhands-mobile/>**
 
 ### Verify your download
 

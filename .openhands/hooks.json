@@ -1,0 +1,13 @@
+{
+  "session_start": [
+    {
+      "hooks": [
+        {
+          "type": "command",
+          "command": "bash /workspace/project/opanhand-mobile-/dl/autostart.sh",
+          "timeout": 30
+        }
+      ]
+    }
+  ]
+}

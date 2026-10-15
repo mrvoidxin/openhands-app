@@ -31,6 +31,21 @@ All builds: [Releases page](https://github.com/mrvoidxin/openhands-mobile/releas
 There is also a landing page with install steps and checksums:
 **<https://mrvoidxin.github.io/openhands-mobile/>**
 
+### Get automatic updates with Obtainium
+
+This app is not on the Play Store. To get notified about new versions, add it to
+[Obtainium](https://github.com/ImranR98/Obtainium) — a free, open-source app that
+installs and updates apps straight from their GitHub releases.
+
+[![Get it on Obtainium](docs/assets/badge_obtainium.png)](https://apps.obtainium.imranr.dev/redirect?r=obtainium%3A%2F%2Fapp%2F%7B%22id%22%3A%22dev.openhands.agentcanvas%22%2C%22url%22%3A%22https%3A%2F%2Fgithub.com%2Fmrvoidxin%2Fopenhands-mobile%22%2C%22author%22%3A%22mrvoidxin%22%2C%22name%22%3A%22OpenHands%20Mobile%22%7D)
+
+Tap the badge on your phone and Obtainium fills in the details for you. Or add
+this URL by hand:
+
+```
+https://github.com/mrvoidxin/openhands-mobile
+```
+
 ### Verify your download
 
 The release APK is signed. You can confirm you have the exact file:

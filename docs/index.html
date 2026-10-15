@@ -87,6 +87,10 @@
   .btn-ghost{border-color:var(--line);color:var(--paper-dim)}
   .btn-ghost:hover{border-color:var(--paper-dim);color:var(--paper);transform:translateY(-3px)}
   .btn svg{flex:none}
+  .obtain{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:28px}
+  .obtain img{display:block;border-radius:9px;transition:transform .18s,box-shadow .25s}
+  .obtain a:hover img{transform:translateY(-3px);box-shadow:0 14px 34px -14px rgba(255,106,61,.6)}
+  .obtain span{font-size:12.5px;color:var(--paper-faint);max-width:34ch}
   .meta{display:flex;flex-wrap:wrap;border-top:1px solid var(--line-soft);padding-top:20px}
   .meta div{padding-right:26px;margin-right:26px;border-right:1px solid var(--line-soft)}
   .meta div:last-child{border:0;margin:0;padding-right:0}
@@ -231,6 +235,12 @@
             Download APK &middot; 6.0 MB
           </a>
           <a class="btn btn-ghost" href="https://github.com/mrvoidxin/openhands-mobile/releases/latest/download/app-debug.apk">Debug build</a>
+        </div>
+        <div class="obtain">
+          <a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium%3A%2F%2Fapp%2F%7B%22id%22%3A%22dev.openhands.agentcanvas%22%2C%22url%22%3A%22https%3A%2F%2Fgithub.com%2Fmrvoidxin%2Fopenhands-mobile%22%2C%22author%22%3A%22mrvoidxin%22%2C%22name%22%3A%22OpenHands%20Mobile%22%7D">
+            <img src="assets/badge_obtainium.png" alt="Get it on Obtainium" width="161" height="48">
+          </a>
+          <span>Get automatic update notifications — no Play Store needed.</span>
         </div>
         <dl class="meta">
           <div><dt>Version</dt><dd>1.27.1</dd></div>

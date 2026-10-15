@@ -235,7 +235,11 @@ app — and the payment details fill in automatically:
 
 </div>
 
-**Or tap this link on your phone:** [`mrsameer1906@okhdfcbank`](upi://pay?pa=mrsameer1906@okhdfcbank&pn=Sameer&cu=INR)
+**Or copy this UPI ID** into the "Pay to UPI ID" field of your UPI app:
+
+```
+mrsameer1906@okhdfcbank
+```
 
 No amount is suggested and nothing is expected. Give only if you want to, and
 only what you are comfortable with. Thank you either way.

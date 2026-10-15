@@ -10,6 +10,7 @@ Run and supervise your AI coding agents from your phone.
 [![Version](https://img.shields.io/badge/version-1.27.1-blue?style=for-the-badge)](https://github.com/mrvoidxin/opanhand-mobile-/releases/tag/v1.27.1)
 [![Build](https://github.com/mrvoidxin/opanhand-mobile-/actions/workflows/build-android-apk.yml/badge.svg)](https://github.com/mrvoidxin/opanhand-mobile-/actions/workflows/build-android-apk.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)](https://github.com/mrvoidxin/opanhand-mobile-/blob/main/OpenHands-main/LICENSE)
+[![Support via UPI](https://img.shields.io/badge/Support-UPI-ff9f1c?style=for-the-badge&logo=buymeacoffee&logoColor=white)](#support-this-project)
 
 </div>
 
@@ -209,13 +210,56 @@ documentation.
 
 ---
 
+## Support this project
+
+This app is **free and open source**, and it always will be. You do not have to
+pay anything to download it, use it, or modify it.
+
+That said, if this project saved you some time and you feel like saying thanks,
+a small contribution is genuinely appreciated. It goes towards keeping the build
+pipeline running and putting more time into improvements.
+
+### Pay via UPI (India)
+
+| | |
+| --- | --- |
+| **UPI ID** | `mrsameer1906@okhdfcbank` |
+| **Name** | Sameer |
+
+Scan the QR code with any UPI app — GPay, PhonePe, Paytm, BHIM, or your bank's
+app — and the payment details fill in automatically:
+
+<div align="center">
+
+<img src="assets/upi-qr.png" alt="UPI QR code for mrsameer1906@okhdfcbank" width="240">
+
+</div>
+
+**Or tap this link on your phone:** [`mrsameer1906@okhdfcbank`](upi://pay?pa=mrsameer1906@okhdfcbank&pn=Sameer&cu=INR)
+
+No amount is suggested and nothing is expected. Give only if you want to, and
+only what you are comfortable with. Thank you either way.
+
+### Other ways to help (free)
+
+Not everyone can or should send money. These help just as much:
+
+- **Star this repository** so more people can find it.
+- **Report a bug** or suggest an improvement in
+  [Issues](https://github.com/mrvoidxin/opanhand-mobile-/issues).
+- **Tell someone** who would find a mobile OpenHands client useful.
+- **Contribute** a fix or a feature through a pull request.
+
+---
+
 ## Credits and license
 
 - The UI is [OpenHands Agent Canvas](https://github.com/OpenHands/OpenHands),
   licensed under MIT. All credit for the application belongs to the OpenHands
   project and its contributors.
 - This repository only adds the Android packaging (Capacitor) and the build
-  pipeline.
+  pipeline. Packaged and maintained by **Sameer**
+  ([@mrvoidxin](https://github.com/mrvoidxin)).
 - The Android wrapper is released under the MIT license as well.
 
 This project is not affiliated with or endorsed by the OpenHands team.
@@ -225,5 +269,7 @@ This project is not affiliated with or endorsed by the OpenHands team.
 <div align="center">
 
 **[Download the latest APK](https://github.com/mrvoidxin/opanhand-mobile-/releases/latest/download/app-release.apk)**
+
+If it helped you, you can [buy me a chai ☕](#support-this-project) — but only if you want to.
 
 </div>

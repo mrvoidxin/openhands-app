@@ -8,7 +8,7 @@ Run and supervise your AI coding agents from your phone.
 
 [![Download APK](https://img.shields.io/badge/Download-APK-6c5ce7?style=for-the-badge&logo=android&logoColor=white)](https://github.com/mrvoidxin/openhands-mobile/releases/latest/download/app-release.apk)
 [![Website](https://img.shields.io/badge/Website-openhands--mobile-FF6A3D?style=for-the-badge&logo=githubpages&logoColor=white)](https://mrvoidxin.github.io/openhands-mobile/)
-[![Version](https://img.shields.io/badge/version-1.27.2-blue?style=for-the-badge)](https://github.com/mrvoidxin/openhands-mobile/releases/tag/v1.27.2)
+[![Version](https://img.shields.io/badge/version-1.27.3-blue?style=for-the-badge)](https://github.com/mrvoidxin/openhands-mobile/releases/tag/v1.27.3)
 [![Build](https://github.com/mrvoidxin/openhands-mobile/actions/workflows/build-android-apk.yml/badge.svg)](https://github.com/mrvoidxin/openhands-mobile/actions/workflows/build-android-apk.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)](https://github.com/mrvoidxin/openhands-mobile/blob/main/LICENSE)
 [![Support via UPI](https://img.shields.io/badge/Support-UPI-ff9f1c?style=for-the-badge&logo=buymeacoffee&logoColor=white)](#support-this-project)
@@ -226,6 +226,44 @@ export OPENHANDS_KEY_ALIAS=openhands
 
 Never commit the keystore. `.gitignore` already excludes `*.keystore` and `*.jks`.
 
+#### Keystore backup and recovery
+
+The private key exists in exactly two places: the GitHub Actions secret, and a
+local backup you keep yourself. If both are lost, you can never publish an
+update that installs over the existing app — users would have to uninstall
+first, and Android would treat the new build as a different app.
+
+Keep the backup **outside** this repository and never serve it from a web
+directory. A safe backup bundle contains:
+
+| File | Why |
+| --- | --- |
+| `release.keystore` | the private key itself |
+| `release-cert.pem` | the public certificate, for verification |
+| `CREDENTIALS.txt` | the alias and the two passwords |
+| `CHECKSUMS.txt` | SHA-256 of the keystore, to detect corruption |
+
+Store that bundle in a password manager, an encrypted archive, or offline
+media. To check a backup is still valid and matches the published app:
+
+```bash
+keytool -list -keystore release.keystore -storetype PKCS12 \
+  -storepass "$STORE_PASSWORD" | grep -i privatekeyentry
+
+# fingerprint must match the certificate the published APK was signed with
+keytool -printcert -jarfile app-release.apk | grep SHA256
+keytool -printcert -file release-cert.pem | grep SHA256
+```
+
+To rebuild a lost GitHub secret from a backup:
+
+```bash
+base64 -w0 release.keystore   # paste into ANDROID_KEYSTORE_BASE64
+```
+
+If the keystore is genuinely gone, generate a new one, bump the version, and
+tell users to uninstall the old app before installing the new build.
+
 ---
 
 ## Continuous integration
@@ -323,15 +361,22 @@ Not everyone can or should send money. These help just as much:
 
 ## Credits and license
 
-- The UI is [OpenHands Agent Canvas](https://github.com/OpenHands/OpenHands),
-  licensed under MIT. All credit for the application belongs to the OpenHands
-  project and its contributors.
-- This repository only adds the Android packaging (Capacitor) and the build
-  pipeline. Packaged and maintained by **Sameer**
+**All credit for the application belongs to the OpenHands project.**
+
+- The app is [OpenHands Agent Canvas](https://github.com/OpenHands/OpenHands),
+  built by **All Hands AI** and its contributors, and released under the MIT
+  license. The interface, the agent canvas and everything inside the app are
+  their work.
+- The launcher icon and logo are the **official OpenHands artwork**, used
+  unchanged (the yellow mark on white). No custom branding is applied.
+- This repository only adds the Android packaging (Capacitor wrapper, icons,
+  splash screen) and the build pipeline. Packaged and maintained by **Sameer**
   ([@mrvoidxin](https://github.com/mrvoidxin)).
 - The Android wrapper is released under the MIT license as well.
 
-This project is not affiliated with or endorsed by the OpenHands team.
+This project is not affiliated with or endorsed by the OpenHands team or All
+Hands AI. If you want the official product, see
+<https://github.com/OpenHands/OpenHands>.
 
 ---
 

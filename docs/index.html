@@ -10,10 +10,21 @@
 <meta property="og:description" content="Free, open-source Android app. Download the APK, sideload it, and run OpenHands agents from your phone.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://mrvoidxin.github.io/openhands-mobile/">
+<meta property="og:image" content="https://mrvoidxin.github.io/openhands-mobile/assets/og-preview.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="OpenHands Mobile — run AI coding agents from your phone">
+<meta property="og:site_name" content="OpenHands Mobile">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="OpenHands Mobile — AI coding agents in your pocket">
+<meta name="twitter:description" content="Free, open-source Android app. Download the APK, sideload it, and run OpenHands agents from your phone.">
+<meta name="twitter:image" content="https://mrvoidxin.github.io/openhands-mobile/assets/og-preview.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%2308080A'/><path d='M28 62V38h10l12 16 12-16h10v24' stroke='%23FF6A3D' stroke-width='8' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+<link rel="icon" type="image/svg+xml" href="assets/openhands-favicon.svg">
+<link rel="alternate icon" type="image/png" sizes="32x32" href="assets/openhands-favicon-32.png">
+<link rel="apple-touch-icon" href="assets/openhands-icon-512.png">
 <noscript><style>#pre{display:none!important}[data-reveal]{opacity:1!important;transform:none!important}</style></noscript>
 <style>
   :root{
@@ -87,10 +98,8 @@
   #pre{position:fixed;inset:0;z-index:200;background:var(--ink);display:grid;place-items:center;transition:opacity .7s var(--ease),visibility .7s}
   #pre.done{opacity:0;visibility:hidden}
   .pre-in{display:flex;flex-direction:column;align-items:center;gap:22px}
-  .pre-mark{width:66px;height:66px}
-  .pre-mark path{stroke:var(--flame);stroke-width:8;fill:none;stroke-linecap:round;stroke-linejoin:round;
-    stroke-dasharray:220;stroke-dashoffset:220;animation:draw 1.5s var(--ease) forwards}
-  @keyframes draw{to{stroke-dashoffset:0}}
+  .pre-mark{width:66px;height:66px;animation:preMark .7s var(--ease) both}
+  @keyframes preMark{from{opacity:0;transform:scale(.82)}to{opacity:1;transform:none}}
   .pre-word{font-family:var(--mono);font-size:11px;letter-spacing:.42em;text-transform:uppercase;color:var(--faint);opacity:0;animation:fadein .6s .5s var(--ease) forwards}
   .pre-bar{width:170px;height:2px;background:rgba(246,242,233,.1);border-radius:9px;overflow:hidden}
   .pre-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--flame),var(--amber));animation:fill 1.5s var(--ease) forwards}
@@ -107,7 +116,7 @@
   nav.stuck{background:rgba(8,8,10,.78);backdrop-filter:blur(18px) saturate(160%);border-color:var(--line-soft)}
   .nav-in{display:flex;align-items:center;gap:30px;height:68px}
   .brand{display:flex;align-items:center;gap:11px;font-weight:700;letter-spacing:-.012em;font-size:15px}
-  .brand svg{flex:none;transition:transform .5s var(--ease)}
+  .brand svg,.brand .mark{flex:none;transition:transform .5s var(--ease)}
   .brand:hover svg{transform:rotate(-8deg) scale(1.08)}
   .brand span{color:var(--faint);font-weight:400}
   .nav-links{display:flex;gap:4px;margin-left:auto;font-size:13.5px;color:var(--dim)}
@@ -331,7 +340,7 @@
 <!-- preloader -->
 <div id="pre" aria-hidden="true">
   <div class="pre-in">
-    <svg class="pre-mark" viewBox="0 0 100 100"><path d="M28 64V36h11l11 15 11-15h11v28"/></svg>
+    <img class="pre-mark" src="assets/openhands-icon-512.png" alt="">
     <div class="pre-word">OpenHands Mobile</div>
     <div class="pre-bar"><i></i></div>
   </div>
@@ -353,7 +362,7 @@
 <nav id="nav">
   <div class="wrap nav-in">
     <a class="brand" href="#top">
-      <svg width="24" height="24" viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="22" fill="#FF6A3D"/><path d="M28 64V36h11l11 15 11-15h11v28" stroke="#fff" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <img src="assets/openhands-icon-512.png" width="24" height="24" alt="" class="mark">
       <b>OpenHands</b><span>Mobile</span>
     </a>
     <div class="nav-links">
@@ -362,6 +371,7 @@
       <a href="#install">Install</a>
       <a href="#verify">Verify</a>
       <a href="#support">Support</a>
+      <a href="#credits">Credits</a>
     </div>
     <a class="nav-gh" href="https://github.com/mrvoidxin/openhands-mobile" target="_blank" rel="noopener">
       <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
@@ -390,7 +400,7 @@
           <span>Get automatic update notifications — no Play Store needed.</span>
         </div>
         <dl class="meta" data-reveal>
-          <div><dt>Version</dt><dd>1.27.2</dd></div>
+          <div><dt>Version</dt><dd>1.27.3</dd></div>
           <div><dt>Min Android</dt><dd>6.0+</dd></div>
           <div><dt>Package</dt><dd>dev.openhands.agentcanvas</dd></div>
           <div><dt>License</dt><dd>MIT</dd></div>
@@ -520,7 +530,7 @@ Get-FileHash app-release.apk -Algorithm SHA256
 
 <b># Confirm the package identity</b>
 aapt dump badging app-release.apk | head -1
-<b># package: name='dev.openhands.agentcanvas' versionName='1.27.2'</b></pre>
+<b># package: name='dev.openhands.agentcanvas' versionName='1.27.3'</b></pre>
   </div>
 </section>
 
@@ -577,12 +587,42 @@ aapt dump badging app-release.apk | head -1
   </div>
 </section>
 
+<section id="credits">
+  <div class="ghost-num">07</div>
+  <div class="wrap">
+    <div data-reveal>
+      <div class="s-label">Credits</div>
+      <h2>Built on <em>OpenHands.</em></h2>
+      <p class="s-intro">Everything you see inside the app — the interface, the agent canvas, the whole experience — is the work of the OpenHands project. This repository only wraps it for Android.</p>
+    </div>
+    <div class="support" data-reveal>
+      <div class="upi">
+        <div class="lbl">The application</div>
+        <div class="id">OpenHands Agent Canvas</div>
+        <p><a href="https://github.com/OpenHands/OpenHands" target="_blank" rel="noopener">OpenHands</a> is built by All Hands AI and its contributors, and released under the MIT license. All credit for the app belongs to them. The launcher icon and logo are the official OpenHands artwork, used unchanged.</p>
+      </div>
+      <div class="qr">
+        <img src="assets/openhands-icon-512.png" alt="OpenHands logo" width="150" height="150">
+      </div>
+    </div>
+    <div class="free" data-reveal>
+      <b>What this repository adds:</b>
+      <ul>
+        <li>The Capacitor Android wrapper and launcher icon, splash screen and theming.</li>
+        <li>The GitHub Actions pipeline that builds and signs the release APK.</li>
+        <li>This landing page, the download mirror and the install instructions.</li>
+        <li>Packaged and maintained by <a href="https://github.com/mrvoidxin" target="_blank" rel="noopener">Sameer (@mrvoidxin)</a>, under the MIT license.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
 <footer>
   <div class="wrap">
     <div class="foot">
       <div>
         <a class="brand" href="#top" style="margin-bottom:15px">
-          <svg width="22" height="22" viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="22" fill="#FF6A3D"/><path d="M28 64V36h11l11 15 11-15h11v28" stroke="#fff" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <img src="assets/openhands-icon-512.png" width="22" height="22" alt="" class="mark">
           <b>OpenHands</b><span>Mobile</span>
         </a>
         <p>Community Android packaging of OpenHands Agent Canvas. Packaged and maintained by <a href="https://github.com/mrvoidxin" target="_blank" rel="noopener">Sameer (@mrvoidxin)</a>. Released under the MIT license.</p>

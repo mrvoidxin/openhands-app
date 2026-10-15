@@ -16,6 +16,12 @@ GitHub Pages serves `docs/` at https://mrvoidxin.github.io/openhands-mobile/ .
 **IzzyOnDroid is a dead end** (their policy rejects LLM front-ends) — distribute
 via GitHub Releases + an Obtainium badge instead. Details in `2026-10-15.md`.
 
+`docs/index.html` is a hand-written, animation-heavy single-file landing page.
+It is fully self-contained (only the two `docs/assets/*.png`). **Do not expect
+headless Chromium to verify its scroll/motion** — rAF advances one frame and
+smooth scrolling never animates under `--virtual-time-budget`; see the daily log
+for what can and cannot be tested that way.
+
 **Permanent download links (GitHub Releases, never goes down):**
 https://github.com/mrvoidxin/openhands-mobile/releases/latest/download/app-release.apk
 (+ `app-debug.apk`), release tag `v1.27.1`. CI workflow at the **repo root**

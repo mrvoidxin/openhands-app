@@ -36,16 +36,18 @@ INDEX = """<!doctype html>
     <h1>OpenHands Mobile</h1>
     <p>Agent Canvas wrapped with Capacitor for Android</p>
 
-    <h2>Signed release build (recommended)</h2>
-    <a class="btn" href="/openhands.apk" download>Download APK</a>
-    <div class="meta">6.0 MB &middot; version 1.27.1 &middot; md5 0dc5ac1d46002fa75ffa1ceecc37f4c5</div>
+    <h2>Permanent link (recommended)</h2>
+    <a class="btn" href="https://github.com/mrvoidxin/opanhand-mobile-/releases/latest/download/app-release.apk" download>Download APK</a>
+    <div class="meta">version 1.27.1 &middot; md5 2365d6465759187c4c5a6716c2219242 &middot; hosted on GitHub Releases, always available</div>
 
     <h2>Debug build</h2>
-    <a class="btn alt" href="/openhands-debug.apk" download>Download debug APK</a>
-    <div class="meta">7.3 MB &middot; debuggable, verbose logs</div>
+    <a class="btn alt" href="https://github.com/mrvoidxin/opanhand-mobile-/releases/latest/download/app-debug.apk" download>Download debug APK</a>
+    <div class="meta">debuggable, verbose logs</div>
 
-    <h2>Mirror</h2>
-    <p style="font-size:.85rem">If this page does not load, try the mirror:
+    <h2>This server (fast mirror)</h2>
+    <p style="font-size:.85rem">
+      <a style="color:#8ce99a" href="/openhands.apk" download>openhands.apk</a> &middot;
+      <a style="color:#8ce99a" href="/openhands-debug.apk" download>openhands-debug.apk</a> &middot;
       <a style="color:#8ce99a" href="https://work-2-flepgphmcvqhkivx.prod-runtime.all-hands.dev/">work-2 mirror</a>
     </p>
 

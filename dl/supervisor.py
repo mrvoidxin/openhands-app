@@ -16,7 +16,6 @@ never shows up in shell history or in `ps`.
 """
 import json
 import os
-import shutil
 import socket
 import subprocess
 import sys
@@ -36,10 +35,6 @@ CHECK_INTERVAL = 15  # seconds between liveness checks of the HTTP servers
 PING_INTERVAL = 240  # seconds between idle-timer pings (limit is 1200s)
 SERVER = os.path.join(HERE, "serve.py")
 LOG = "/tmp/dl-supervisor.log"
-
-# Durable copies kept outside the repo, so a wiped checkout cannot lose the APK.
-BACKUP_DIR = "/workspace/artifacts/openhands-apk"
-APK_NAMES = ["openhands.apk", "openhands-debug.apk"]
 
 
 def log(msg):
@@ -106,26 +101,12 @@ def ping_runtime():
         log(f"keepalive failed: {exc}")
 
 
-def ensure_artifacts():
-    """Restore any missing APK from the durable backup."""
-    for name in APK_NAMES:
-        target = os.path.join(HERE, name)
-        source = os.path.join(BACKUP_DIR, name)
-        if not os.path.exists(target) and os.path.exists(source):
-            try:
-                shutil.copy2(source, target)
-                log(f"restored missing {name} from backup")
-            except OSError as exc:
-                log(f"could not restore {name}: {exc}")
-
-
 def main():
     log(f"supervisor starting (ports {PORTS}, check every {CHECK_INTERVAL}s, "
         f"ping every {PING_INTERVAL}s)")
     last_ping = 0.0
     while True:
         try:
-            ensure_artifacts()
             for port in PORTS:
                 if not port_is_open(port):
                     log(f"port {port} is down -> restarting server")

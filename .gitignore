@@ -14,3 +14,12 @@ OpenHands-main/.react-router/
 OpenHands-main/dist/
 __pycache__/
 *.pyc
+
+# Signing material - never commit. CI restores it from the
+# ANDROID_KEYSTORE_BASE64 secret; local builds drop their own copy here.
+*.keystore
+*.jks
+
+# Local APK binaries - distributed through GitHub Releases, not git.
+dl/*.apk
+OpenHands-mobile.zip

@@ -382,7 +382,6 @@
             <svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1a.75.75 0 0 1 .75.75v6.19l2.22-2.22a.75.75 0 1 1 1.06 1.06l-3.5 3.5a.75.75 0 0 1-1.06 0l-3.5-3.5a.75.75 0 0 1 1.06-1.06l2.22 2.22V1.75A.75.75 0 0 1 8 1ZM2 11.25a.75.75 0 0 1 1.5 0v1.5c0 .14.11.25.25.25h8.5c.14 0 .25-.11.25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 12.25 14.5h-8.5A1.75 1.75 0 0 1 2 12.75v-1.5Z"/></svg>
             Download APK &middot; 6.0 MB
           </a>
-          <a class="btn btn-ghost" data-magnetic href="https://github.com/mrvoidxin/openhands-mobile/releases/latest/download/app-debug.apk">Debug build</a>
         </div>
         <div class="obtain" data-reveal>
           <a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium%3A%2F%2Fapp%2F%7B%22id%22%3A%22dev.openhands.agentcanvas%22%2C%22url%22%3A%22https%3A%2F%2Fgithub.com%2Fmrvoidxin%2Fopenhands-mobile%22%2C%22author%22%3A%22mrvoidxin%22%2C%22name%22%3A%22OpenHands%20Mobile%22%7D">
@@ -391,7 +390,7 @@
           <span>Get automatic update notifications — no Play Store needed.</span>
         </div>
         <dl class="meta" data-reveal>
-          <div><dt>Version</dt><dd>1.27.1</dd></div>
+          <div><dt>Version</dt><dd>1.27.2</dd></div>
           <div><dt>Min Android</dt><dd>6.0+</dd></div>
           <div><dt>Package</dt><dd>dev.openhands.agentcanvas</dd></div>
           <div><dt>License</dt><dd>MIT</dd></div>
@@ -482,6 +481,7 @@
       <div class="s-label">Install</div>
       <h2>Four steps, <em>about a minute.</em></h2>
       <p class="s-intro">Android will warn you about installing outside the Play Store. That warning is expected for any sideloaded app.</p>
+      <div class="notice" data-reveal><b>Upgrading from a build older than v1.27.2?</b> That version was signed with a different key. Android refuses to install this over the top, so uninstall the old app first. Your app settings go with it — note your agent server URL before you upgrade.</div>
     </div>
     <div class="steps">
       <div class="step" data-reveal><div class="n">STEP 01</div><div><h3>Download the APK</h3><p>Tap the download button. The file is about 6.0&nbsp;MB. If your browser asks, choose <code>Download anyway</code>.</p></div></div>
@@ -502,14 +502,14 @@
     </div>
     <div class="verify" data-reveal>
       <div class="hash">
-        <h4>Release APK &middot; SHA-256 <button class="cp" data-c="bafcfe8551441213f8a22ae99edb77104d0590986eeb258651244a5be9c25a6d">Copy</button></h4>
-        <div class="sz">app-release.apk &middot; 6,257,650 bytes</div>
-        <div class="val">bafcfe8551441213f8a22ae99edb77104d0590986eeb258651244a5be9c25a6d</div>
+        <h4>Release APK &middot; SHA-256 <button class="cp" data-c="f17032380d62450c9c5b72fbc6b63198aa7168579038f50365d195e6a8db76c9">Copy</button></h4>
+        <div class="sz">app-release.apk &middot; 6,257,709 bytes</div>
+        <div class="val">f17032380d62450c9c5b72fbc6b63198aa7168579038f50365d195e6a8db76c9</div>
       </div>
       <div class="hash">
-        <h4>Debug APK &middot; SHA-256 <button class="cp" data-c="dfcf1629b94e6ddd39e0b3f9d298ba086c0bfdc8d09c1d6a0c9801361cad1aa0">Copy</button></h4>
-        <div class="sz">app-debug.apk &middot; 7,741,237 bytes</div>
-        <div class="val">dfcf1629b94e6ddd39e0b3f9d298ba086c0bfdc8d09c1d6a0c9801361cad1aa0</div>
+        <h4>Signer certificate &middot; SHA-256 <button class="cp" data-c="0D96FA458C3442D228ACC8569704104A4E83443A680EDF81C6AE0DD16DDA8112">Copy</button></h4>
+        <div class="sz">Compare with <code>apksigner verify --print-certs</code></div>
+        <div class="val">0D:96:FA:45:8C:34:42:D2:28:AC:C8:56:97:04:10:4A:4E:83:44:3A:68:0E:DF:81:C6:AE:0D:D1:6D:DA:81:12</div>
       </div>
     </div>
     <pre class="cmd" data-reveal><b># Linux / macOS</b>
@@ -520,7 +520,7 @@ Get-FileHash app-release.apk -Algorithm SHA256
 
 <b># Confirm the package identity</b>
 aapt dump badging app-release.apk | head -1
-<b># package: name='dev.openhands.agentcanvas' versionName='1.27.1'</b></pre>
+<b># package: name='dev.openhands.agentcanvas' versionName='1.27.2'</b></pre>
   </div>
 </section>
 

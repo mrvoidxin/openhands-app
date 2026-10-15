@@ -7,8 +7,8 @@ android {
         applicationId "dev.openhands.agentcanvas"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 10271
-        versionName "1.27.1"
+        versionCode 10272
+        versionName "1.27.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
@@ -18,19 +18,30 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file('release.keystore')
-            storePassword 'openhands'
-            keyAlias 'openhands'
-            keyPassword 'openhands'
+            // The keystore and its passwords are deliberately NOT in the repo.
+            // CI decodes android/app/release.keystore from the
+            // ANDROID_KEYSTORE_BASE64 secret and supplies the passwords as env
+            // vars. For a local build, set the same env vars and drop the
+            // keystore at android/app/release.keystore.
+            def ksFile = file('release.keystore')
+            if (ksFile.exists()) {
+                storeFile ksFile
+                storePassword System.getenv("OPENHANDS_KEYSTORE_PASSWORD") ?: ""
+                keyAlias System.getenv("OPENHANDS_KEY_ALIAS") ?: "openhands"
+                keyPassword System.getenv("OPENHANDS_KEY_PASSWORD") ?: ""
+            }
         }
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            // Signed with a locally generated keystore so the APK can be
-            // sideloaded. Not a Play Store upload key.
-            signingConfig signingConfigs.release
+            // Signed so the APK can be sideloaded. Not a Play Store upload key.
+            if (file('release.keystore').exists()) {
+                signingConfig signingConfigs.release
+            } else {
+                logger.warn("release.keystore missing - producing an UNSIGNED release APK")
+            }
         }
     }
 }

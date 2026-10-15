@@ -1,8 +1,17 @@
 name: Build Android APK
 
 # Builds the Capacitor-wrapped web app into a signed Android APK.
-# On a tag push (v*) the APK is attached to the GitHub Release, which gives a
-# permanent, always-available download URL.
+# On a tag push (v*) the release APK is attached to the GitHub Release, which
+# gives a permanent, always-available download URL.
+#
+# Required repository secrets:
+#   ANDROID_KEYSTORE_BASE64    base64 of the release.keystore (PKCS12/JKS)
+#   ANDROID_KEYSTORE_PASSWORD  store password
+#   ANDROID_KEY_PASSWORD       key password
+#   ANDROID_KEY_ALIAS          key alias (defaults to "openhands")
+#
+# Optional repository variable:
+#   BACKEND_BASE_URL           baked into the web bundle as VITE_BACKEND_BASE_URL
 
 on:
   workflow_dispatch:
@@ -57,21 +66,31 @@ jobs:
       - name: Sync Capacitor Android project
         run: npx cap sync android
 
-      - name: Decode release keystore
+      - name: Restore release keystore
+        id: keystore
         env:
           KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
         run: |
-          if [ -n "$KEYSTORE_BASE64" ]; then
-            echo "$KEYSTORE_BASE64" | base64 -d > android/app/release.keystore
-            echo "using keystore from secrets"
-          elif [ -f android/app/release.keystore ]; then
-            echo "using keystore committed in the repo"
-          else
-            echo "::warning::no keystore found; release build will be unsigned"
+          if [ -z "$KEYSTORE_BASE64" ]; then
+            # Without the secret the build is unsigned, so it must never be
+            # published. The publish step below is gated on this output, which
+            # keeps a branch/PR run green while still refusing to ship an
+            # unsigned APK.
+            echo "::warning::ANDROID_KEYSTORE_BASE64 is not set - the APK will be UNSIGNED and will not be published."
+            echo "::warning::Add the signing secrets (see README, section 'Signing') to publish releases."
+            echo "signed=false" >> "$GITHUB_OUTPUT"
+            exit 0
           fi
+          printf '%s' "$KEYSTORE_BASE64" | base64 -d > android/app/release.keystore
+          echo "keystore restored: $(wc -c < android/app/release.keystore) bytes"
+          echo "signed=true" >> "$GITHUB_OUTPUT"
 
       - name: Build release APK
         working-directory: OpenHands-main/android
+        env:
+          OPENHANDS_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          OPENHANDS_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          OPENHANDS_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
         run: |
           chmod +x gradlew
           ./gradlew assembleRelease --no-daemon
@@ -80,22 +99,35 @@ jobs:
         working-directory: OpenHands-main/android
         run: ./gradlew assembleDebug --no-daemon
 
-      - name: Show APK details
+      - name: Verify the release APK
+        working-directory: OpenHands-main/android
         run: |
-          APK=android/app/build/outputs/apk/release/app-release.apk
-          ls -l "$APK"
-          md5sum "$APK"
+          APK=$(ls app/build/outputs/apk/release/*.apk 2>/dev/null | head -1)
+          if [ -z "$APK" ]; then
+            echo "::error::no release APK was produced"
+            exit 1
+          fi
+          echo "apk: $APK"
+          APKSIGNER=$(ls "$ANDROID_HOME"/build-tools/*/apksigner 2>/dev/null | tail -1 || true)
           AAPT=$(ls "$ANDROID_HOME"/build-tools/*/aapt2 2>/dev/null | tail -1 || true)
           if [ -n "$AAPT" ]; then
-            "$AAPT" dump badging "$APK" 2>/dev/null \
-              | grep -E "^package|application-label" || true
+            "$AAPT" dump badging "$APK" 2>/dev/null | grep -E "^package" || true
           fi
+          if [ -n "$APKSIGNER" ]; then
+            if "$APKSIGNER" verify --print-certs "$APK" 2>/dev/null | grep -q "Signer #1"; then
+              "$APKSIGNER" verify --print-certs "$APK" | grep -E "Signer #1 certificate (DN|SHA-256)"
+            else
+              echo "::warning::release APK is NOT signed (no keystore secret) - not publishable"
+            fi
+          fi
+          sha256sum "$APK"
+          ls -l "$APK"
 
       - name: Upload release APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: openhands-release-apk
-          path: OpenHands-main/android/app/build/outputs/apk/release/app-release.apk
+          path: OpenHands-main/android/app/build/outputs/apk/release/*.apk
           if-no-files-found: error
 
       - name: Upload debug APK artifact
@@ -105,8 +137,12 @@ jobs:
           path: OpenHands-main/android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
 
-      - name: Attach APKs to the GitHub Release
-        if: startsWith(github.ref, 'refs/tags/v')
+      - name: Attach the release APK to the GitHub Release
+        # Only a signed release APK is published, and only from a v* tag. The
+        # debug build stays a workflow artifact (login required) because it is
+        # debuggable. Gating on `signed` means an unsigned APK can never be
+        # published, however the workflow is triggered.
+        if: startsWith(github.ref, 'refs/tags/v') && steps.keystore.outputs.signed == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -116,5 +152,4 @@ jobs:
             --notes "Android build of the OpenHands Agent Canvas UI, packaged with Capacitor."
           gh release upload "$TAG" \
             android/app/build/outputs/apk/release/app-release.apk#app-release.apk \
-            android/app/build/outputs/apk/debug/app-debug.apk#app-debug.apk \
             --clobber

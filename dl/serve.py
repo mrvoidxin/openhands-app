@@ -1,11 +1,20 @@
 #!/usr/bin/env python3
-"""Tiny static server that serves the built OpenHands APK for download."""
+"""Static server for the OpenHands Mobile download page.
+
+The APK itself is NOT served from here. GitHub Releases is the durable host:
+the asset URL below is permanent and always points at the newest signed build.
+This server previously kept a local copy of the APK, which silently went stale
+after every new release and handed users an outdated binary. It now redirects
+to the release asset instead, so a stale copy is impossible.
+"""
 import http.server
 import os
 import socketserver
 
 PORT = int(os.environ.get("APK_PORT") or os.environ.get("PORT") or "12000")
 ROOT = os.path.dirname(os.path.abspath(__file__))
+
+RELEASE = "https://github.com/mrvoidxin/openhands-mobile/releases/latest/download"
 
 INDEX = """<!doctype html>
 <html lang="en">
@@ -24,11 +33,10 @@ INDEX = """<!doctype html>
     a.btn { display:inline-block; margin-top:.4rem; padding:.8rem 1.6rem; border-radius:10px;
             background:#6c5ce7; color:#fff; text-decoration:none; font-weight:600; }
     a.btn:hover { background:#5b4bd6; }
-    a.alt { background:#2b2b36; }
-    a.alt:hover { background:#3a3a48; }
     code { color:#8ce99a; }
     ul { text-align:left; color:#9aa0a6; font-size:.85rem; padding-left:1.1rem; }
     .meta { font-size:.75rem; color:#6b7280; margin-top:.3rem; }
+    .note { font-size:.78rem; color:#f0b429; margin-top:1.4rem; text-align:left; }
   </style>
 </head>
 <body>
@@ -36,31 +44,34 @@ INDEX = """<!doctype html>
     <h1>OpenHands Mobile</h1>
     <p>Agent Canvas wrapped with Capacitor for Android</p>
 
-    <h2>Permanent link (recommended)</h2>
-    <a class="btn" href="https://github.com/mrvoidxin/openhands-mobile/releases/latest/download/app-release.apk" download>Download APK</a>
-    <div class="meta">version 1.27.1 &middot; md5 2365d6465759187c4c5a6716c2219242 &middot; hosted on GitHub Releases, always available</div>
-
-    <h2>Debug build</h2>
-    <a class="btn alt" href="https://github.com/mrvoidxin/openhands-mobile/releases/latest/download/app-debug.apk" download>Download debug APK</a>
-    <div class="meta">debuggable, verbose logs</div>
-
-    <h2>This server (fast mirror)</h2>
-    <p style="font-size:.85rem">
-      <a style="color:#8ce99a" href="/openhands.apk" download>openhands.apk</a> &middot;
-      <a style="color:#8ce99a" href="/openhands-debug.apk" download>openhands-debug.apk</a> &middot;
-      <a style="color:#8ce99a" href="https://work-2-flepgphmcvqhkivx.prod-runtime.all-hands.dev/">work-2 mirror</a>
-    </p>
+    <h2>Download the APK</h2>
+    <a class="btn" href="__RELEASE__/app-release.apk" download>Download APK</a>
+    <div class="meta">Signed release build, hosted on GitHub Releases &mdash; always the latest version</div>
 
     <h2>Install</h2>
     <ul>
-      <li>Allow install from unknown sources for your browser/file manager.</li>
-      <li>Open the APK on the phone and install.</li>
-      <li>On first launch, add your agent server host + API key (Local or Cloud).</li>
+      <li>Uninstall any older OpenHands Mobile build first &mdash; the app was re-signed.</li>
+      <li>Allow install from unknown sources for your browser or file manager.</li>
+      <li>Open the APK on the phone and install it.</li>
+      <li>On first launch, add your agent server host and API key.</li>
     </ul>
+
+    <p class="note">
+      This page only redirects. The APK is served by GitHub Releases so that the
+      download link can never go stale or offline.
+    </p>
   </div>
 </body>
 </html>
-"""
+""".replace("__RELEASE__", RELEASE)
+
+# Paths that used to serve a local APK copy. Send them to the release instead.
+REDIRECTS = {
+    "/openhands.apk": f"{RELEASE}/app-release.apk",
+    "/openhands-debug.apk": f"{RELEASE}/app-release.apk",
+    "/app-release.apk": f"{RELEASE}/app-release.apk",
+    "/app-debug.apk": f"{RELEASE}/app-release.apk",
+}
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
@@ -76,6 +87,12 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(body)
             return
+        if self.path in REDIRECTS:
+            self.send_response(302)
+            self.send_header("Location", REDIRECTS[self.path])
+            self.send_header("Content-Length", "0")
+            self.end_headers()
+            return
         super().do_GET()
 
     def log_message(self, fmt, *args):
@@ -88,5 +105,5 @@ class ReuseServer(socketserver.ThreadingTCPServer):
 
 if __name__ == "__main__":
     with ReuseServer(("0.0.0.0", PORT), Handler) as httpd:
-        print(f"Serving {ROOT} on port {PORT}", flush=True)
+        print(f"Serving {ROOT} on port {PORT} (APK redirects to GitHub Releases)", flush=True)
         httpd.serve_forever()

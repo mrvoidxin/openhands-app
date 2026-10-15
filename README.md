@@ -8,9 +8,9 @@ Run and supervise your AI coding agents from your phone.
 
 [![Download APK](https://img.shields.io/badge/Download-APK-6c5ce7?style=for-the-badge&logo=android&logoColor=white)](https://github.com/mrvoidxin/openhands-mobile/releases/latest/download/app-release.apk)
 [![Website](https://img.shields.io/badge/Website-openhands--mobile-FF6A3D?style=for-the-badge&logo=githubpages&logoColor=white)](https://mrvoidxin.github.io/openhands-mobile/)
-[![Version](https://img.shields.io/badge/version-1.27.1-blue?style=for-the-badge)](https://github.com/mrvoidxin/openhands-mobile/releases/tag/v1.27.1)
+[![Version](https://img.shields.io/badge/version-1.27.2-blue?style=for-the-badge)](https://github.com/mrvoidxin/openhands-mobile/releases/tag/v1.27.2)
 [![Build](https://github.com/mrvoidxin/openhands-mobile/actions/workflows/build-android-apk.yml/badge.svg)](https://github.com/mrvoidxin/openhands-mobile/actions/workflows/build-android-apk.yml)
-[![License: MIT](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)](https://github.com/mrvoidxin/openhands-mobile/blob/main/OpenHands-main/LICENSE)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)](https://github.com/mrvoidxin/openhands-mobile/blob/main/LICENSE)
 [![Support via UPI](https://img.shields.io/badge/Support-UPI-ff9f1c?style=for-the-badge&logo=buymeacoffee&logoColor=white)](#support-this-project)
 
 </div>
@@ -23,10 +23,17 @@ Run and supervise your AI coding agents from your phone.
 
 | Build | Size | Link |
 | --- | --- | --- |
-| **Release (recommended)** | 6.0 MB | **[app-release.apk](https://github.com/mrvoidxin/openhands-mobile/releases/latest/download/app-release.apk)** |
-| Debug (verbose logs) | 7.4 MB | [app-debug.apk](https://github.com/mrvoidxin/openhands-mobile/releases/latest/download/app-debug.apk) |
+| **Release (signed)** | 6.0 MB | **[app-release.apk](https://github.com/mrvoidxin/openhands-mobile/releases/latest/download/app-release.apk)** |
 
 All builds: [Releases page](https://github.com/mrvoidxin/openhands-mobile/releases)
+
+> **Upgrading from a build older than v1.27.2?** That version was signed with a
+> different key, so Android will not install this over the top. Uninstall the old
+> app first, then install this APK. Your settings live in the app's data, so
+> they are removed with it — note down your agent server URL before you upgrade.
+
+The debug build is a debuggable APK and is not published as a download. It is
+available as a CI workflow artifact to signed-in users.
 
 There is also a landing page with install steps and checksums:
 **<https://mrvoidxin.github.io/openhands-mobile/>**
@@ -52,18 +59,22 @@ The release APK is signed. You can confirm you have the exact file:
 
 ```
 File:    app-release.apk
-Size:    6,257,650 bytes
-MD5:     2365d6465759187c4c5a6716c2219242
-SHA-256: bafcfe8551441213f8a22ae99edb77104d0590986eeb258651244a5be9c25a6d
+Size:    6,257,709 bytes
+MD5:     ef7eeb03b6120a4bc05a29c7e40ff6be
+SHA-256: f17032380d62450c9c5b72fbc6b63198aa7168579038f50365d195e6a8db76c9
 Package: dev.openhands.agentcanvas
+Signer:  SHA-256 0D:96:FA:45:8C:34:42:D2:28:AC:C8:56:97:04:10:4A:4E:83:44:3A:68:0E:DF:81:C6:AE:0D:D1:6D:DA:81:12
 ```
 
 Check it on your phone or PC:
 
 ```bash
-md5sum app-release.apk                     # Linux / macOS
-certutil -hashfile app-release.apk MD5     # Windows
+sha256sum app-release.apk                  # Linux / macOS
+certutil -hashfile app-release.apk SHA256  # Windows
 ```
+
+To confirm the APK really came from this project, compare the signing
+certificate above — `apksigner verify --print-certs app-release.apk`.
 
 ---
 
@@ -178,15 +189,37 @@ VITE_BACKEND_BASE_URL=https://my-server.example.com npm run build:app
 
 ### Signing
 
-The repo ships a throwaway keystore at
-`OpenHands-main/android/app/release.keystore` so builds are installable by
-sideloading. **It is not a Play Store upload key.** For your own distribution,
-generate a keystore and keep it private:
+The signing keystore is **not** in the repository. It lives only as an
+encrypted GitHub Actions secret, so the private key is never public.
+
+Generate a keystore once, and keep the file backed up somewhere safe — if you
+lose it you can no longer publish updates that install over the existing app:
 
 ```bash
-keytool -genkey -v -keystore my-release.keystore -alias mykey \
+keytool -genkey -v -keystore release.keystore -alias openhands \
   -keyalg RSA -keysize 2048 -validity 10000
 ```
+
+Then add four repository secrets (Settings → Secrets and variables → Actions):
+
+| Secret | Value |
+| --- | --- |
+| `ANDROID_KEYSTORE_BASE64` | `base64 -w0 release.keystore` |
+| `ANDROID_KEYSTORE_PASSWORD` | the store password you chose |
+| `ANDROID_KEY_PASSWORD` | the key password you chose |
+| `ANDROID_KEY_ALIAS` | the alias, e.g. `openhands` |
+
+CI writes `release.keystore` from the secret, signs, and verifies the result.
+A local build reads the same names from the environment:
+
+```bash
+export OPENHANDS_KEYSTORE_PASSWORD=...
+export OPENHANDS_KEY_PASSWORD=...
+export OPENHANDS_KEY_ALIAS=openhands
+# drop release.keystore at OpenHands-main/android/app/release.keystore
+```
+
+Never commit the keystore. `.gitignore` already excludes `*.keystore` and `*.jks`.
 
 ---
 
@@ -194,26 +227,34 @@ keytool -genkey -v -keystore my-release.keystore -alias mykey \
 
 The workflow at
 [`.github/workflows/build-android-apk.yml`](.github/workflows/build-android-apk.yml)
-builds a signed APK on every push to `main`, and on every version tag it also
-attaches the APKs to the GitHub Release.
+builds the APK on every push to `main`, and on every version tag it signs the
+release APK with the secret key and attaches it to the GitHub Release.
 
 ### Cutting a new release
+
+1. Bump `versionCode` and `versionName` in
+   `OpenHands-main/android/app/build.gradle`.
+2. Commit, then tag and push:
 
 ```bash
 git tag v1.28.0
 git push origin v1.28.0
 ```
 
-GitHub Actions builds the APKs and publishes them. The `releases/latest/download`
-links above then point at the new version automatically — no need to update any
-documentation.
+GitHub Actions builds and publishes the APK. The `releases/latest/download`
+links then point at the new version automatically — no documentation to update.
+The publish step only runs when the keystore secret is present, so an unsigned
+APK can never be released by accident.
 
 ### Optional repository settings
 
 | Name | Type | Purpose |
 | --- | --- | --- |
 | `BACKEND_BASE_URL` | Variable | Bakes the agent server URL into the app. |
-| `ANDROID_KEYSTORE_BASE64` | Secret | Use your own signing key instead of the bundled one. |
+| `ANDROID_KEYSTORE_BASE64` | Secret | The signing keystore, base64-encoded. Required to publish. |
+| `ANDROID_KEYSTORE_PASSWORD` | Secret | Keystore store password. |
+| `ANDROID_KEY_PASSWORD` | Secret | Keystore key password. |
+| `ANDROID_KEY_ALIAS` | Secret | Keystore key alias. |
 
 ---
 

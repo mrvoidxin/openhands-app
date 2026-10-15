@@ -1,20 +1,31 @@
 #!/usr/bin/env bash
-# Publish the APKs as a GitHub Release on mrvoidxin/openhands-mobile.
+# Publish a built APK as a GitHub Release on mrvoidxin/openhands-mobile.
 #
 # GitHub Release asset URLs are permanent and public, so this is the durable
-# "never goes down" host. It needs a token WITH WRITE ACCESS: the default
-# GITHUB_TOKEN in this sandbox is a read-only GitHub App token (`ghu_...`) and
-# every write returns 403 "Resource not accessible by integration".
+# "never goes down" host. It needs a token that can write Releases.
+#
+# Prefer letting CI publish: push a v* tag and the workflow attaches the signed
+# APK. Use this script when you built locally and want to publish by hand.
 #
 # Usage:
-#   GH_PAT=<token-with-repo-scope> bash publish-github.sh
-#   # or: GITHUB_TOKEN=<writable-token> bash publish-github.sh
+#   GH_PAT=<token-with-repo-scope> bash publish-github.sh v1.27.2
 set -u
 
 REPO="mrvoidxin/openhands-mobile"
-TAG="v1.27.1"
-TITLE="OpenHands Mobile v1.27.1 (Android APK)"
+TAG="${1:-}"
+if [ -z "$TAG" ]; then
+  echo "usage: GH_PAT=<token> bash publish-github.sh <tag>   e.g. v1.27.2" >&2
+  exit 1
+fi
+TITLE="OpenHands Mobile $TAG (Android APK)"
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+APK="$DIR/../OpenHands-main/android/app/build/outputs/apk/release/app-release.apk"
+
+if [ ! -f "$APK" ]; then
+  echo "ERROR: no built APK at $APK" >&2
+  echo "Build it first: cd OpenHands-main/android && ./gradlew assembleRelease" >&2
+  exit 1
+fi
 
 TOKEN="${GH_PAT:-${GITHUB_TOKEN:-}}"
 if [ -z "$TOKEN" ]; then
@@ -29,30 +40,9 @@ echo "==> checking token write access on $REPO"
 LOGIN=$(api https://api.github.com/user | python3 -c "import json,sys;print(json.load(sys.stdin).get('login','?'))")
 echo "    token user: $LOGIN"
 
-# A cheap write probe: create then delete a branch. 403 means read-only.
 SHA=$(curl -sS -m 60 -H "Authorization: Bearer $TOKEN" \
       "https://api.github.com/repos/$REPO/commits/main" \
       | python3 -c "import json,sys;print(json.load(sys.stdin)['sha'])")
-PROBE=$(api -X POST "https://api.github.com/repos/$REPO/git/refs" \
-        -d "{\"ref\":\"refs/heads/openhands-apk-probe\",\"sha\":\"$SHA\"}")
-if echo "$PROBE" | grep -q "Resource not accessible"; then
-  cat >&2 <<'MSG'
-ERROR: this token cannot write to the repository (403 read-only).
-
-The sandbox's default GITHUB_TOKEN is a read-only GitHub App token. To publish
-you need one of:
-  a) A personal access token with the 'repo' scope (classic) or
-     'Contents: Read and write' (fine-grained), then:
-        GH_PAT=<that token> bash publish-github.sh
-  b) Grant the OpenHands GitHub App 'Read and write' access to this repository
-     (GitHub -> Settings -> Applications -> Installed GitHub Apps -> OpenHands
-     -> Configure -> Repository access + Permissions), then re-run this script
-     with the refreshed GITHUB_TOKEN.
-MSG
-  exit 2
-fi
-api -X DELETE "https://api.github.com/repos/$REPO/git/refs/heads/openhands-apk-probe" > /dev/null
-echo "    write access OK"
 
 echo "==> creating release $TAG"
 EXISTING=$(api "https://api.github.com/repos/$REPO/releases/tags/$TAG")
@@ -60,21 +50,18 @@ if echo "$EXISTING" | grep -q '"id"'; then
   echo "    release $TAG already exists, reusing it"
 else
   api -X POST "https://api.github.com/repos/$REPO/releases" \
-    -d "$(python3 -c '
-import json
+    -d "$(TAG="$TAG" TITLE="$TITLE" python3 -c '
+import json, os
 print(json.dumps({
-  "tag_name": "v1.27.1",
-  "name": "OpenHands Mobile v1.27.1 (Android APK)",
+  "tag_name": os.environ["TAG"],
+  "name": os.environ["TITLE"],
   "body": (
-    "Android build of the OpenHands Agent Canvas UI "
-    "(`@openhands/agent-canvas` v1.27.1), packaged with Capacitor 7.\n\n"
+    "Android build of the OpenHands Agent Canvas UI, packaged with Capacitor 7.\n\n"
     "**Install**\n"
-    "1. Allow install from unknown sources for your browser / file manager.\n"
-    "2. Open the APK on the phone and install it.\n"
-    "3. On first launch, add your agent server host and API key.\n\n"
-    "**Details**\n"
-    "- Package `dev.openhands.agentcanvas`, versionName 1.27.1 / versionCode 10271\n"
-    "- minSdk 23, targetSdk 35, signed with APK Signature Scheme v1 + v2\n\n"
+    "1. Uninstall any older OpenHands Mobile build - the app was re-signed.\n"
+    "2. Allow install from unknown sources for your browser / file manager.\n"
+    "3. Open the APK on the phone and install it.\n"
+    "4. On first launch, add your agent server host and API key.\n\n"
     "This release was produced by an AI agent (OpenHands) on behalf of the "
     "repository owner."
   ),
@@ -82,19 +69,23 @@ print(json.dumps({
   echo "    created"
 fi
 
-echo "==> uploading assets"
-for pair in "openhands.apk:app-release.apk" "openhands-debug.apk:app-debug.apk"; do
-  src="${pair%%:*}"; name="${pair##*:}"
-  echo "    $name <- $src"
-  api -X POST \
-    -H "Content-Type: application/vnd.android.package-archive" \
-    --data-binary "@$DIR/$src" \
-    "https://uploads.github.com/repos/$REPO/releases/$(api "https://api.github.com/repos/$REPO/releases/tags/$TAG" | python3 -c 'import json,sys;print(json.load(sys.stdin)["id"])')/assets?name=$name" \
-    > /dev/null
-done
+echo "==> uploading app-release.apk"
+REL_ID=$(api "https://api.github.com/repos/$REPO/releases/tags/$TAG" \
+         | python3 -c 'import json,sys;print(json.load(sys.stdin)["id"])')
+# Replace an existing asset of the same name, if there is one.
+ASSET_ID=$(api "https://api.github.com/repos/$REPO/releases/$REL_ID/assets" \
+           | python3 -c 'import json,sys;print(next((a["id"] for a in json.load(sys.stdin) if a["name"]=="app-release.apk"), ""))')
+if [ -n "$ASSET_ID" ]; then
+  api -X DELETE "https://api.github.com/repos/$REPO/releases/assets/$ASSET_ID" > /dev/null
+  echo "    removed previous asset"
+fi
+api -X POST \
+  -H "Content-Type: application/vnd.android.package-archive" \
+  --data-binary "@$APK" \
+  "https://uploads.github.com/repos/$REPO/releases/$REL_ID/assets?name=app-release.apk" \
+  > /dev/null
 
 echo
 echo "Permanent download links:"
 echo "  https://github.com/$REPO/releases/latest"
 echo "  https://github.com/$REPO/releases/download/$TAG/app-release.apk"
-echo "  https://github.com/$REPO/releases/download/$TAG/app-debug.apk"

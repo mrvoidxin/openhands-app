@@ -109,6 +109,11 @@ backend, and it does not send your data anywhere by itself.
 
 ## Install
 
+> **Upgrading from a build older than v1.27.2?** Uninstall the old app first.
+> Android refuses to install this release over the top because the signing key
+> changed. Your app settings are removed with it, so note your agent server URL
+> before you upgrade.
+
 1. On your phone, open the [download link](https://github.com/mrvoidxin/openhands-mobile/releases/latest/download/app-release.apk).
 2. If Android asks, allow **install from unknown sources** for your browser or
    file manager. (Settings → Apps → Special access → Install unknown apps.)

@@ -4,7 +4,7 @@
       "hooks": [
         {
           "type": "command",
-          "command": "bash /workspace/project/opanhand-mobile-/dl/autostart.sh",
+          "command": "bash /workspace/project/openhands-mobile/dl/autostart.sh",
           "timeout": 30
         }
       ]

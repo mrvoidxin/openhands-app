@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Publish the APKs as a GitHub Release on mrvoidxin/opanhand-mobile-.
+# Publish the APKs as a GitHub Release on mrvoidxin/openhands-mobile.
 #
 # GitHub Release asset URLs are permanent and public, so this is the durable
 # "never goes down" host. It needs a token WITH WRITE ACCESS: the default
@@ -11,7 +11,7 @@
 #   # or: GITHUB_TOKEN=<writable-token> bash publish-github.sh
 set -u
 
-REPO="mrvoidxin/opanhand-mobile-"
+REPO="mrvoidxin/openhands-mobile"
 TAG="v1.27.1"
 TITLE="OpenHands Mobile v1.27.1 (Android APK)"
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

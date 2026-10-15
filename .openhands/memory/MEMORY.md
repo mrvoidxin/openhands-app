@@ -5,13 +5,13 @@ reused: entries about `ytkit-android` / `dl-service` belong to an older project
 and are archived in `2026-10-11-ytkit-archive.md`. Verify paths before trusting
 any memory.
 
-## Current project: `opanhand-mobile-`
+## Current project: `openhands-mobile`
 OpenHands Agent Canvas React/TS frontend (`@openhands/agent-canvas` v1.27.1)
 packaged for Android with Capacitor. The repo now tracks `OpenHands-main/`
 (source + the generated `android/` project) so CI can build it.
 
 **Permanent download links (GitHub Releases, never goes down):**
-https://github.com/mrvoidxin/opanhand-mobile-/releases/latest/download/app-release.apk
+https://github.com/mrvoidxin/openhands-mobile/releases/latest/download/app-release.apk
 (+ `app-debug.apk`), release tag `v1.27.1`. CI workflow at the **repo root**
 (`.github/workflows/build-android-apk.yml`) builds the APKs and attaches them to
 the release on a `v*` tag. The repo home page (README) documents download,

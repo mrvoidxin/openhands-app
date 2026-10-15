@@ -37,11 +37,11 @@ INDEX = """<!doctype html>
     <p>Agent Canvas wrapped with Capacitor for Android</p>
 
     <h2>Permanent link (recommended)</h2>
-    <a class="btn" href="https://github.com/mrvoidxin/opanhand-mobile-/releases/latest/download/app-release.apk" download>Download APK</a>
+    <a class="btn" href="https://github.com/mrvoidxin/openhands-mobile/releases/latest/download/app-release.apk" download>Download APK</a>
     <div class="meta">version 1.27.1 &middot; md5 2365d6465759187c4c5a6716c2219242 &middot; hosted on GitHub Releases, always available</div>
 
     <h2>Debug build</h2>
-    <a class="btn alt" href="https://github.com/mrvoidxin/opanhand-mobile-/releases/latest/download/app-debug.apk" download>Download debug APK</a>
+    <a class="btn alt" href="https://github.com/mrvoidxin/openhands-mobile/releases/latest/download/app-debug.apk" download>Download debug APK</a>
     <div class="meta">debuggable, verbose logs</div>
 
     <h2>This server (fast mirror)</h2>

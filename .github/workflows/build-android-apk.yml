@@ -37,8 +37,6 @@ jobs:
           distribution: temurin
           java-version: 21
 
-      - uses: android-actions/setup-android@v3
-
       - name: Install dependencies
         run: npm ci
 
@@ -82,8 +80,11 @@ jobs:
           APK=android/app/build/outputs/apk/release/app-release.apk
           ls -l "$APK"
           md5sum "$APK"
-          "$ANDROID_HOME"/build-tools/*/aapt dump badging "$APK" \
-            | grep -E "^package|application-label" || true
+          AAPT=$(ls "$ANDROID_HOME"/build-tools/*/aapt2 2>/dev/null | tail -1 || true)
+          if [ -n "$AAPT" ]; then
+            "$AAPT" dump badging "$APK" 2>/dev/null \
+              | grep -E "^package|application-label" || true
+          fi
 
       - name: Upload release APK artifact
         uses: actions/upload-artifact@v4

@@ -96,13 +96,11 @@ ensure a **local** helper exists (`git config --local credential.helper
 — without it `git push` hangs on `Username for 'https://github.com':` until the
 command times out (`2026-10-16.md`).
 
-Android APK build recipe, gotchas and artifact hashes: `2026-10-15.md`.
-Highlights: JDK 21 via apt; Android SDK cmdline-tools in
-`/workspace/tools/android-sdk` (its `bin/*` need `chmod +x`);
-`VITE_MOCK_API=false npm run build:app` with `VITE_BACKEND_BASE_URL` left UNSET
-so the app shows its own backend setup screen; `signingConfigs` must precede
-`buildTypes` in `android/app/build.gradle`; the keystore is module-relative
-(`android/app/release.keystore`); run gradle with `nohup ... &` and poll.
+Android APK build recipe, gotchas and artifact hashes: `2026-10-15.md`
+(JDK 21; SDK in `/workspace/tools/android-sdk`, `bin/*` need `chmod +x`;
+`VITE_MOCK_API=false npm run build:app` with `VITE_BACKEND_BASE_URL` UNSET;
+`signingConfigs` before `buildTypes`; keystore is module-relative; run gradle
+with `nohup ... &` and poll).
 
 ## Environment (reusable, expensive to rediscover)
 - **Sandbox restarts wipe `/tmp` but keep `/workspace`.** A PAT parked in `/tmp`

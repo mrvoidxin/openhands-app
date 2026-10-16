@@ -158,3 +158,24 @@ with `nohup ... &` and poll).
   `.stagger.is-in>*{transform:none}` overrides `transform`.
 - Known mismatch: the page advertises v1.27.2 / SHA f7a5805b... but the latest
   release is v1.27.3 and the `releases/latest` APK link serves v1.27.3.
+
+## Signing key is pinned - updates always install in place (2026-10-16)
+- Repo: `mrvoidxin/openhands-mobile`. Release workflow
+  `.github/workflows/build-android-apk.yml`.
+- **Requirement from the user:** every future APK must be signed with the same
+  key so users update in place and never uninstall. It already was, by
+  accident; now it is enforced.
+- Pinned signer SHA-256 (public, safe in the repo):
+  `0D:96:FA:45:8C:34:42:D2:28:AC:C8:56:97:04:10:4A:4E:83:44:3A:68:0E:DF:81:C6:AE:0D:D1:6D:DA:81:12`
+  (self-signed, CN=OpenHands Mobile, valid to 2054-03-02).
+- The CI `Verify the release APK` step compares the built APK's signer to that
+  value and fails the build on mismatch. Override only on a deliberate rotation
+  via the `SIGNING_CERT_SHA256` repository variable.
+- **No JDK in this sandbox**, so no `keytool`. To read an APK's signing cert,
+  unzip `META-INF/CERT.RSA` (PKCS#7) and parse it with Python
+  `cryptography`'s `pkcs7.load_der_pkcs7_certificates`.
+- **Android CI builds are not reproducible** - same commit, different APK
+  SHA-256. Release assets change only on a `v*` tag push, so never re-tag an
+  existing version; bump `versionCode`/`versionName` instead.
+- `SIGNING.md` documents the fingerprint, the enforcement, and the backup and
+  rotation rules. Latest release: v1.27.3, 6,456,583 bytes.

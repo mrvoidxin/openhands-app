@@ -93,8 +93,8 @@ support > footer, plus a mobile sticky download bar. Rebuilt 2026-10-16.
 
 ### Screens section (added 2026-10-16)
 - `#screens` sits between `#features` and `#install`; nav link `data-nav="screens"`;
-  later sections renumbered. Assets: `docs/assets/screens/*.webp` (742x1484, 275 KB
-  for four, q86 at 2/3 scale).
+  later sections renumbered. Assets: `docs/assets/screens/*.webp` (742x1484).
+  Replaced 2026-10-16 with clean captures (the first set overlapped).
 - `.shots` is a CSS grid: a horizontal snap-scroll rail below 980px
   (`grid-auto-flow:column; grid-auto-columns:78%` + `scroll-snap-type:x mandatory`,
   scrollbar hidden) and `repeat(4,1fr)` at/above 980px.
@@ -111,12 +111,24 @@ way to shoot the app here.
 
 - The onboarding wizard is a **transform carousel**: all four slides are in the DOM at
   `x=50/362/675/988` and the slider carries inline `transform: translateX(...)`; only
-  the active slide is painted. To shoot an inactive step, **clone the slide into a fixed
-  overlay and clear the inline transform** - screenshotting the offscreen node gives a
-  blank frame. Frame the clone (border + footer row) so all captures share one size.
-- A mock `/api/settings` backend did **not** advance the wizard (validation too strict),
-  so only the four setup steps were captured. The section says the fields are blank
-  rather than implying a configured account.
+  the active slide is painted. To shoot a given step, **set every sibling's inline
+  transform to `translateX((j-idx)*100%)`** (instant jump, no animation) - then ordinary
+  `element.screenshot()` on the slide container is correct. Cloning into an overlay
+  also works but the transform shift is simpler and was the final method.
+- **The telemetry consent card silently overlays the wizard** and is the cause of the
+  "word over word" overlap. It shows while `user_consents_to_analytics === null` from
+  **`/api/settings`**. Setting the mock to `true` did NOT dismiss it before capture;
+  remove the `[data-testid=telemetry-consent-form]` element (walk up to nearest
+  `role=dialog`) instead. Shoot each step after dismissal.
+- The mock `/api/settings` backend **does** advance the wizard once `/api/agent-profiles`
+  returns `{profiles:[...]}` (not a bare array) and `/api/settings/agent-schema` returns
+  `{sections:[{key,label,fields:[{key,label,value_type,choices}]}]}`.
+- Route-intercept a fake hostname in Playwright and proxy to the mock so shots show a
+  real-looking URL, not `127.0.0.1:13240`.
+- Pad short frames to a uniform height with the card's own bg (`rgb(32,32,32)`) rather
+  than stretching. **Confirm frames with tesseract OCR** - crisp OCR means no overlap.
+- Promo kit `docs/promo/instagram-*-screens-*.png` embeds the same captures; swap the
+  frames in place (detected box coords are in the 2026-10-16 daily log).
 
 ## Environment (reusable, expensive to rediscover)
 - **Sandbox restarts wipe `/tmp` but keep `/workspace`.** A PAT parked in `/tmp` is gone

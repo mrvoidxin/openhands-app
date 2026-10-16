@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OpenHands Mobile — promo kit</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="../assets/favicon.png">
+<style>
+  :root{
+    --bg:#08080A;--surface:#111116;--surface-2:#17171F;--border:#22222B;
+    --text:#F2F2F5;--text-muted:#A6A6B4;--accent:#7C8CFF;--accent-2:#3DDC97;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--bg);color:var(--text);line-height:1.6;
+    font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+    -webkit-font-smoothing:antialiased;padding:28px 18px 90px;
+  }
+  .wrap{max-width:880px;margin:0 auto}
+  h1{font-size:clamp(28px,6vw,42px);letter-spacing:-.03em;font-weight:800;line-height:1.1}
+  h2{font-size:clamp(19px,4vw,24px);letter-spacing:-.02em;font-weight:700;margin:44px 0 6px}
+  .lead{color:var(--text-muted);margin-top:10px;font-size:16px}
+  .note{
+    border:1px solid var(--border);background:var(--surface);border-radius:14px;
+    padding:16px 18px;margin-top:22px;color:var(--text-muted);font-size:15px;
+  }
+  .note b{color:var(--text)}
+  .grid{display:grid;gap:18px;margin-top:20px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+  figure{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden}
+  figure img{display:block;width:100%;height:auto;background:var(--bg)}
+  figcaption{padding:12px 14px;font-size:13px;color:var(--text-muted);display:flex;justify-content:space-between;gap:10px;align-items:center}
+  figcaption b{color:var(--text);font-weight:600;font-size:14px;display:block}
+  .dl{font-size:12px;color:var(--accent);text-decoration:none;border:1px solid var(--border);padding:6px 11px;border-radius:999px;white-space:nowrap}
+  .dl:hover{border-color:var(--accent)}
+  .copyblock{background:var(--surface);border:1px solid var(--border);border-radius:16px;margin-top:14px;overflow:hidden}
+  .copyhead{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--border)}
+  .copyhead span{font-weight:600;font-size:15px}
+  button{
+    font:inherit;font-size:13px;font-weight:600;cursor:pointer;color:var(--text);
+    background:var(--surface-2);border:1px solid var(--border);padding:7px 14px;border-radius:9px;
+  }
+  button:hover{border-color:var(--accent)}
+  button.done{color:var(--accent-2);border-color:rgba(61,220,151,.5)}
+  pre{
+    margin:0;padding:16px;white-space:pre-wrap;word-wrap:break-word;
+    font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:13.5px;
+    color:var(--text-muted);line-height:1.65;
+  }
+  a{color:var(--accent)}
+  .foot{margin-top:52px;padding-top:22px;border-top:1px solid var(--border);color:var(--text-muted);font-size:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Promo kit</h1>
+  <p class="lead">Ready-to-post art and copy for OpenHands Mobile. On a phone, long-press an image to save it. The copy blocks have a Copy button.</p>
+
+  <div class="note">
+    <b>Link used everywhere:</b> https://mrvoidxin.github.io/openhands-mobile/<br>
+    <b>Direct APK:</b> https://github.com/mrvoidxin/openhands-mobile/releases/latest/download/app-release.apk<br>
+    Keep the line about needing your own OpenHands server. It prevents "it does not work" comments.
+  </div>
+
+  <h2>Images</h2>
+  <div class="grid">
+    <figure>
+      <img src="instagram-post-1080.png" alt="Square post: Your AI coding agents, in your pocket" loading="lazy">
+      <figcaption><span><b>Square post</b>1080 × 1080</span><a class="dl" href="instagram-post-1080.png" download>Save</a></figcaption>
+    </figure>
+    <figure>
+      <img src="carousel-1-why-1080x1350.png" alt="Carousel slide 1: Small app. Real work." loading="lazy">
+      <figcaption><span><b>Carousel 1 — why</b>1080 × 1350</span><a class="dl" href="carousel-1-why-1080x1350.png" download>Save</a></figcaption>
+    </figure>
+    <figure>
+      <img src="carousel-2-how-1080x1350.png" alt="Carousel slide 2: Three steps" loading="lazy">
+      <figcaption><span><b>Carousel 2 — how</b>1080 × 1350</span><a class="dl" href="carousel-2-how-1080x1350.png" download>Save</a></figcaption>
+    </figure>
+    <figure>
+      <img src="carousel-3-download-1080x1350.png" alt="Carousel slide 3: Get it now" loading="lazy">
+      <figcaption><span><b>Carousel 3 — download</b>1080 × 1350</span><a class="dl" href="carousel-3-download-1080x1350.png" download>Save</a></figcaption>
+    </figure>
+    <figure>
+      <img src="banner-wide-1600x900.png" alt="Wide banner: Your AI coding agents, in your pocket" loading="lazy">
+      <figcaption><span><b>Wide banner</b>1600 × 900</span><a class="dl" href="banner-wide-1600x900.png" download>Save</a></figcaption>
+    </figure>
+  </div>
+
+  <h2>Instagram caption</h2>
+  <div class="copyblock">
+    <div class="copyhead"><span>Short caption</span><button data-copy="cap1">Copy</button></div>
+    <pre id="cap1">Your AI coding agents, now in your pocket.
+
+OpenHands Mobile lets you run and supervise AI coding agents right from your Android phone. Watch the runs, approve actions, and keep things moving without opening a laptop.
+
+Free and open source (MIT)
+Just 6 MB, Android 6.0 and newer
+Only asks for internet access
+New versions install in place, no reinstall
+
+Download: https://mrvoidxin.github.io/openhands-mobile/
+
+Note: the app is a client, so you need your own OpenHands server running. Link in the comments too.</pre>
+  </div>
+
+  <div class="copyblock">
+    <div class="copyhead"><span>Long description</span><button data-copy="cap2">Copy</button></div>
+    <pre id="cap2">OpenHands Mobile - your AI coding agents, in your pocket.
+
+Ever wanted to check on an agent run while you are away from your desk? OpenHands Mobile brings your AI coding agents to Android. Launch runs, watch what they are doing, and approve actions, all from your phone.
+
+It is a native Android shell around the OpenHands Agent Canvas. Connect it to an OpenHands server on your laptop, a VPS, or the cloud, and your whole workflow fits in your pocket.
+
+Why you will like it:
+- Supervise agents remotely, no laptop needed
+- Lightweight: 6 MB download, about 12 MB installed
+- Asks for internet access and nothing else
+- Clean updates that install straight over the old version
+- Free and open source under the MIT licence
+- Works on Android 6.0 and newer
+
+Get it here:
+Landing page and download: https://mrvoidxin.github.io/openhands-mobile/
+Source code: https://github.com/mrvoidxin/openhands-mobile
+
+Good to know: the app is a client. It needs an OpenHands agent server that you run yourself, and it does not ship one. It is also a community packaging, not an official OpenHands release.
+
+If it is useful to you, a star on the repo goes a long way.
+
+#OpenHands #AIAgents #Coding #Android #OpenSource #DevTools #SelfHosted #Programming #AITools</pre>
+  </div>
+
+  <div class="copyblock">
+    <div class="copyhead"><span>Pinned comment</span><button data-copy="cap3">Copy</button></div>
+    <pre id="cap3">Direct download: https://github.com/mrvoidxin/openhands-mobile/releases/latest/download/app-release.apk
+
+Full info and screenshots: https://mrvoidxin.github.io/openhands-mobile/
+
+Heads up: you need your own OpenHands server running for the app to connect to. Works on Android 6.0 and newer, about 6 MB, MIT licensed.</pre>
+  </div>
+
+  <h2>Posting notes</h2>
+  <div class="note">
+    Instagram captions do not make links clickable. Put the link in the caption as plain text, and also drop it in the first comment, or say "link in bio".<br><br>
+    Use the carousel images in order: why, how, download. A carousel usually reaches further than a single image.<br><br>
+    Keep hashtags between 8 and 12. More than that looks like spam.
+  </div>
+
+  <p class="foot">
+    Live page: <a href="../">mrvoidxin.github.io/openhands-mobile</a> ·
+    <a href="https://github.com/mrvoidxin/openhands-mobile">Source on GitHub</a>
+  </p>
+</div>
+
+<script>
+document.querySelectorAll("button[data-copy]").forEach(function (b) {
+  b.addEventListener("click", function () {
+    var text = document.getElementById(b.dataset.copy).textContent;
+    var done = function () {
+      b.textContent = "Copied";
+      b.classList.add("done");
+      setTimeout(function () { b.textContent = "Copy"; b.classList.remove("done"); }, 1600);
+    };
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(done, function () { fallback(text, done); });
+    } else {
+      fallback(text, done);
+    }
+  });
+});
+function fallback(text, done) {
+  var ta = document.createElement("textarea");
+  ta.value = text;
+  ta.setAttribute("readonly", "");
+  ta.style.position = "fixed";
+  ta.style.top = "-1000px";
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand("copy"); done(); } catch (e) { /* leave the text selected */ }
+  document.body.removeChild(ta);
+}
+</script>
+</body>
+</html>

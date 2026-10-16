@@ -1,10 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="no-js">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>OpenHands Mobile — AI coding agents in your pocket</title>
-<meta name="description" content="OpenHands Agent Canvas packaged as a native Android app. Free, open source, MIT licensed. Download the 6 MB APK and run AI coding agents from your phone with your own backend. No Play Store, no account, no telemetry.">
+<!-- Files the developer must add manually if not already present:
+     assets/phone-demo.png · assets/og-image.png · assets/favicon.png
+     assets/badge_obtainium.png · assets/upi-qr.png -->
+<title>OpenHands Mobile: run AI coding agents from your phone</title>
+<meta name="description" content="Free, open-source Android app. Download the APK and run OpenHands AI coding agents from your phone. No Play Store, no account, no telemetry.">
 <meta name="theme-color" content="#08080A">
 <meta name="color-scheme" content="dark">
 <link rel="canonical" href="https://mrvoidxin.github.io/openhands-mobile/">
@@ -14,7 +17,7 @@
 <meta property="og:description" content="Free, open-source Android app. Download the APK, sideload it, and run OpenHands agents from your phone.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://mrvoidxin.github.io/openhands-mobile/">
-<meta property="og:image" content="https://mrvoidxin.github.io/openhands-mobile/assets/og-preview.png">
+<meta property="og:image" content="https://mrvoidxin.github.io/openhands-mobile/assets/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="OpenHands Mobile — run AI coding agents from your phone">
@@ -24,12 +27,30 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="OpenHands Mobile — AI coding agents in your pocket">
 <meta name="twitter:description" content="Free, open-source Android app. Download the APK, sideload it, and run OpenHands agents from your phone.">
-<meta name="twitter:image" content="https://mrvoidxin.github.io/openhands-mobile/assets/og-preview.png">
+<meta name="twitter:image" content="https://mrvoidxin.github.io/openhands-mobile/assets/og-image.png">
+
+<!-- JSON-LD -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "OpenHands Mobile",
+  "operatingSystem": "Android 6.0+",
+  "applicationCategory": "DeveloperApplication",
+  "license": "https://opensource.org/licenses/MIT",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "author": { "@type": "Person", "name": "Sameer", "alternateName": "mrvoidxin" },
+  "url": "https://mrvoidxin.github.io/openhands-mobile/"
+}
+</script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
+<!-- Brief asks for assets/favicon.png and assets/og-image.png; the repo ships
+     the equivalent files under the names below. Swap the hrefs if you add
+     assets/favicon.png / assets/og-image.png. -->
 <link rel="icon" type="image/svg+xml" href="assets/openhands-favicon.svg">
 <link rel="alternate icon" type="image/png" sizes="32x32" href="assets/openhands-favicon-32.png">
 <link rel="apple-touch-icon" href="assets/openhands-icon-512.png">
@@ -37,7 +58,8 @@
 <script>
   // Marks JS as available so [data-reveal] elements can start hidden.
   // Without this class every element stays visible (no-JS fallback).
-  document.documentElement.className += ' js';
+  var de = document.documentElement;
+  de.className = de.className.replace(/\bno-js\b/, 'js');
 </script>
 
 <style>
@@ -60,14 +82,11 @@
   --radius-sm:8px;
   --radius-md:14px;
   --radius-lg:22px;
-  --radius-xl:32px;
 
   --ease-out:cubic-bezier(0.2,0.8,0.2,1);
   --ease-in-out:cubic-bezier(0.65,0,0.35,1);
-  --ease-spring:cubic-bezier(0.34,1.56,0.64,1);
   --dur-fast:180ms;
   --dur-base:420ms;
-  --dur-slow:900ms;
 
   --container:1120px;
   --pad:20px;
@@ -99,6 +118,17 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 h1,h2,h3,p,ul,ol,figure,blockquote{margin:0}
 ul,ol{padding:0;list-style:none}
 :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+/* Skip link: visible only while focused. */
+.skip{
+  position:fixed;top:10px;left:10px;z-index:300;
+  padding:10px 16px;border-radius:10px;
+  background:var(--accent);color:#0B0B10;font-weight:600;font-size:14px;
+  transform:translateY(-200%);transition:transform 200ms var(--ease-out);
+}
+.skip:focus-visible{transform:translateY(0)}
+/* Body copy links draw their underline on hover. */
+main p a,.section-head a{text-decoration:underline;text-underline-offset:4px;text-decoration-color:transparent;transition:text-decoration-color 250ms var(--ease-out)}
+main p a:hover,.section-head a:hover{text-decoration-color:var(--accent)}
 
 /* ============================================================
    ATMOSPHERE: dot grid + grain (fixed, behind everything)
@@ -579,34 +609,142 @@ h3{font-size:18px;font-weight:600;line-height:1.3;color:var(--text)}
 .note strong{color:#F6EED2}
 
 /* ============================================================
-   VERIFY
+   VERIFY: hash cards, tabs, command block
    ============================================================ */
 .hashgrid{display:grid;gap:14px;margin-top:32px}
 .hashcard{
   background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);
   padding:18px 20px;position:relative;overflow:hidden;
 }
+.hashcard::after{ /* single shimmer pass along the top border on hover */
+  content:"";position:absolute;top:0;left:0;right:0;height:1px;pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(124,140,255,0.9),transparent);
+  transform:translateX(-100%);
+}
+@media (hover:hover){
+  .hashcard:hover::after{animation:shimmer 900ms var(--ease-out) 1}
+}
+@keyframes shimmer{to{transform:translateX(100%)}}
 .hashcard h3{font-family:var(--font-mono);font-size:12px;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-muted);font-weight:600}
-.hashcard code{
-  display:block;margin-top:10px;font-family:var(--font-mono);font-size:13px;
-  color:var(--accent-2);word-break:break-all;line-height:1.55;
+.hash-sub{font-size:12.5px;color:var(--text-muted);margin-top:6px}
+.hashrow{
+  display:flex;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap;
 }
+.hashrow code{
+  flex:1 1 240px;min-width:0;
+  font-family:var(--font-mono);font-size:13px;color:var(--accent-2);
+  word-break:break-all;line-height:1.55;
+}
+
+/* Copy button: icon + label, flips to a checkmark + "Copied" */
 .copy{
-  position:absolute;top:14px;right:14px;
-  width:32px;height:32px;border-radius:8px;border:1px solid var(--border);
-  display:grid;place-items:center;color:var(--text-muted);
-  transition:color var(--dur-fast) var(--ease-out),border-color var(--dur-fast) var(--ease-out),background-color var(--dur-fast) var(--ease-out);
+  display:inline-flex;align-items:center;gap:7px;flex:none;
+  min-height:38px;padding:0 12px;border-radius:9px;
+  border:1px solid var(--border);background:var(--surface-2);
+  font-size:12.5px;font-weight:600;color:var(--text-muted);
+  transition:color var(--dur-fast) var(--ease-out),border-color var(--dur-fast) var(--ease-out),
+             background-color var(--dur-fast) var(--ease-out),transform var(--dur-fast) var(--ease-out);
 }
-.copy:hover{color:var(--text);border-color:var(--border-strong);background:var(--surface-2)}
+.copy:hover{color:var(--text);border-color:var(--border-strong)}
+.copy:active{transform:scale(0.97)}
 .copy svg{width:15px;height:15px}
+.copy .cb-text{transition:opacity 200ms var(--ease-out)}
 .copy.done{color:var(--accent-2);border-color:rgba(61,220,151,0.4)}
+.copy-wide{margin-top:16px}
+
+/* Tabs */
 .term{
   margin-top:24px;background:#0A0A0E;border:1px solid var(--border);border-radius:var(--radius-md);
-  padding:18px 20px;overflow-x:auto;
+  padding:16px 18px 18px;
 }
-.term pre{font-family:var(--font-mono);font-size:13px;line-height:1.75;color:var(--text-muted);margin:0;white-space:pre}
-.term .c{color:#5C5C6B}
-.term .k{color:var(--accent-2)}
+.tabs{position:relative;display:flex;gap:4px;flex-wrap:wrap;border-bottom:1px solid var(--border);padding-bottom:10px}
+.tab{
+  position:relative;padding:8px 12px;border-radius:8px;
+  font-size:13px;font-weight:600;color:var(--text-muted);
+  transition:color var(--dur-fast) var(--ease-out),background-color var(--dur-fast) var(--ease-out);
+}
+.tab:hover{color:var(--text);background:var(--surface)}
+.tab[aria-selected="true"]{color:var(--text)}
+.tab-underline{
+  position:absolute;bottom:-11px;left:0;height:2px;width:0;
+  background:var(--accent);border-radius:2px;
+  transition:transform 300ms var(--ease-out),width 300ms var(--ease-out);
+  will-change:transform;
+}
+.tabpanels{margin-top:16px}
+.tabpanel{opacity:0;transition:opacity 200ms var(--ease-out);overflow-x:auto}
+.tabpanel.is-active{opacity:1}
+.tabpanel pre{font-family:var(--font-mono);font-size:13px;line-height:1.8;color:var(--text-muted);margin:0;white-space:pre}
+.tabpanel .c{color:#5C5C6B}
+.tabpanel .k{color:var(--accent-2)}
+
+.sr-only{
+  position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;
+}
+
+/* ============================================================
+   REQUIREMENTS
+   ============================================================ */
+.specgrid{display:grid;grid-template-columns:1fr;gap:12px;margin-top:32px}
+.spec{
+  border:1px solid var(--border);border-radius:var(--radius-sm);
+  padding:14px 16px;background:rgba(17,17,22,0.5);
+  transition:border-color 250ms var(--ease-out);
+}
+.spec:hover{border-color:var(--border-strong)}
+.spec-k{display:block;font-size:12px;letter-spacing:0.06em;text-transform:uppercase;font-family:var(--font-mono);color:var(--text-muted)}
+.spec-v{display:block;margin-top:6px;font-size:16px;font-weight:600;color:var(--text)}
+
+/* ============================================================
+   SUPPORT
+   ============================================================ */
+.support{position:relative;overflow:hidden}
+.support-glow{
+  position:absolute;left:50%;top:20%;translate:-50% 0;
+  width:min(110vw,900px);aspect-ratio:1;pointer-events:none;
+  background:radial-gradient(circle, rgba(61,220,151,0.08), rgba(61,220,151,0) 65%);
+  animation:glowFloat 16s var(--ease-in-out) infinite;
+}
+.support-card{
+  position:relative;margin-top:32px;display:grid;gap:32px;
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);
+  padding:28px;
+}
+.upi-block .spec-k{color:var(--accent-2)}
+.upi-help{font-size:13.5px;color:var(--text-muted);margin-top:12px;max-width:52ch}
+.disclosure{
+  margin-top:18px;display:inline-flex;align-items:center;gap:9px;min-height:40px;
+  padding:8px 14px;border-radius:10px;border:1px solid var(--border);
+  font-size:13.5px;font-weight:600;color:var(--text);
+  transition:border-color var(--dur-fast) var(--ease-out),background-color var(--dur-fast) var(--ease-out);
+}
+.disclosure:hover{border-color:var(--border-strong);background:var(--surface-2)}
+.disc-arrow{display:grid;place-items:center;transition:transform 300ms var(--ease-out)}
+.disc-arrow svg{width:15px;height:15px}
+.disclosure[aria-expanded="true"] .disc-arrow{transform:rotate(180deg)}
+.qr-panel{margin-top:16px}
+.qr-panel[hidden]{display:none}
+.tip-qr{
+  width:170px;height:170px;border-radius:12px;overflow:hidden;flex:none;
+  background:#fff;padding:8px;border:1px solid var(--border-strong);margin:0;
+}
+.tip-qr img{width:100%;height:100%;object-fit:contain}
+.help-block h3{margin-bottom:16px}
+.help-list{display:grid;gap:10px}
+.help-list li{
+  display:flex;align-items:flex-start;gap:11px;font-size:14.5px;color:var(--text-muted);
+  padding:9px 11px;border-radius:10px;border:1px solid transparent;
+  transition:transform 250ms var(--ease-out),border-color 250ms var(--ease-out),color 250ms var(--ease-out);
+}
+.help-list li:hover{transform:translateY(-2px);border-color:var(--border);color:var(--text)}
+.help-ico{flex:none;display:grid;place-items:center;width:22px;height:22px;color:var(--accent);margin-top:2px}
+.help-ico svg{width:16px;height:16px}
+.support-cta{margin-top:22px;display:flex;flex-wrap:wrap;gap:12px}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
 
 /* ============================================================
    FAQ
@@ -631,54 +769,67 @@ h3{font-size:18px;font-weight:600;line-height:1.3;color:var(--text)}
 .faq details[open] summary .pm::after{transform:scaleY(0)}
 .faq details[open] summary{color:var(--text)}
 .faq .ans{padding:0 4px 22px;color:var(--text-muted);font-size:14.5px;max-width:74ch}
+/* JS enhancement: measure-and-animate the answer height. Without JS the native
+   details behaviour is untouched. The bottom padding moves to the inner element
+   so a collapsed answer takes no vertical space. */
+.js .faq .ans{
+  height:0;overflow:hidden;opacity:0;padding-bottom:0;
+  transition:height 250ms var(--ease-out),opacity 250ms var(--ease-out);
+}
+.js .faq .ans.measuring{height:auto;opacity:1;transition:none}
+.js .faq details[open] .ans{
+  height:auto;opacity:1;
+  transition:height 350ms var(--ease-out),opacity 350ms var(--ease-out);
+}
+.js .faq .ans-in{padding-bottom:22px}
 
 /* ============================================================
-   SUPPORT
+   FOOTER
    ============================================================ */
-.support-card{
-  margin-top:32px;display:grid;gap:28px;align-items:center;
-  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);
-  padding:28px;
-}
-.support-card .upi{
-  font-family:var(--font-mono);font-size:15px;color:var(--text);
-  padding:12px 14px;border-radius:10px;border:1px dashed var(--border-strong);
-  background:#0E0E14;display:flex;align-items:center;gap:10px;flex-wrap:wrap;
-}
-.support-card .upi button{margin-left:auto}
-.tip-qr{
-  width:150px;height:150px;border-radius:12px;overflow:hidden;flex:none;
-  background:#fff;padding:8px;border:1px solid var(--border-strong);
-}
-.tip-qr img{width:100%;height:100%;object-fit:contain}
-.free-list{margin-top:16px;display:grid;gap:8px}
-.free-list li{display:flex;gap:10px;font-size:14.5px;color:var(--text-muted)}
-.free-list li::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--accent-2);margin-top:9px;flex:none}
-
-/* ============================================================
-   DISCLAIMER + FOOTER
-   ============================================================ */
-.disclaimer{
-  display:grid;grid-template-columns:auto 1fr;gap:14px;
-  padding:20px 22px;border-radius:var(--radius-md);
-  background:var(--bg-elev);border:1px solid var(--border);
-}
-.disclaimer svg{width:20px;height:20px;color:var(--text-muted);flex:none;margin-top:2px}
-.disclaimer p{font-size:14px;color:var(--text-muted)}
-.disclaimer strong{color:var(--text)}
-
-.footer{border-top:1px solid var(--border);padding-block:56px 40px}
+.footer{border-top:1px solid var(--border);padding-block:56px calc(40px + env(safe-area-inset-bottom))}
 .footer-grid{display:grid;gap:32px}
 .footer-brand{display:flex;align-items:center;gap:10px;font-weight:600}
-.footer p{font-size:13.5px;color:var(--text-muted);max-width:38ch;margin-top:14px}
+.footer .footer-grid p{font-size:14.5px;line-height:1.65;color:var(--text-muted);max-width:42ch;margin-top:14px}
 .footer h4{font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);font-weight:600;font-family:var(--font-mono);margin-bottom:14px}
 .footer ul{display:grid;gap:10px}
-.footer ul a{font-size:14px;color:var(--text-muted);transition:color var(--dur-fast) var(--ease-out)}
+.footer ul a{
+  position:relative;font-size:14px;color:var(--text-muted);
+  transition:color var(--dur-fast) var(--ease-out);
+}
+.footer ul a::after{
+  content:"";position:absolute;left:0;bottom:-3px;height:1px;width:100%;
+  background:var(--accent);transform:scaleX(0);transform-origin:0 50%;
+  transition:transform 250ms var(--ease-out);
+}
 .footer ul a:hover{color:var(--text)}
+.footer ul a:hover::after{transform:scaleX(1)}
 .footer-bottom{
   margin-top:44px;padding-top:24px;border-top:1px solid var(--border);
-  display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;
-  font-size:13px;color:var(--text-muted);
+  display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:baseline;
+}
+.disclaimer-line{font-size:14px;color:var(--text-muted)}
+.disclaimer-line strong{color:var(--text)}
+.copyright{font-size:14px;color:var(--text-muted)}
+
+/* ============================================================
+   MOBILE STICKY DOWNLOAD BAR
+   ============================================================ */
+.stickybar{
+  position:fixed;left:0;right:0;bottom:0;z-index:120;
+  display:none;padding:12px 16px calc(12px + env(safe-area-inset-bottom));
+  background:rgba(8,8,10,0.92);
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  border-top:1px solid var(--border);
+  transform:translateY(100%);
+  transition:transform 400ms var(--ease-out);
+}
+.stickybar .btn{width:100%}
+.stickybar.is-up{transform:translateY(0)}
+
+@media (max-width:819px){
+  .stickybar{display:block}
+  body{--stickybar-h:72px}
+  footer.footer{padding-bottom:calc(var(--stickybar-h,72px) + 28px + env(safe-area-inset-bottom))}
 }
 
 /* ============================================================
@@ -689,10 +840,15 @@ h3{font-size:18px;font-weight:600;line-height:1.3;color:var(--text)}
   .nav-cta{display:none}
   .hamburger{display:flex;margin-left:auto}
   .mobile-panel{display:block}
+  /* WCAG 2.5.5: keep every touch control at least 44px tall on phones. */
+  .hamburger,.copy,.disclosure,.btn,.tab,.brand{min-height:44px}
+  .tab{padding-block:12px}
+  .hashrow .copy{align-self:stretch}
 }
 @media (min-width:640px){
   :root{--pad:24px}
-  .support-card{grid-template-columns:1fr auto}
+  .support-card{grid-template-columns:1.1fr 1fr;align-items:start}
+  .specgrid{grid-template-columns:repeat(2,1fr)}
 }
 @media (min-width:820px){
   :root{--section-y:96px}
@@ -701,6 +857,7 @@ h3{font-size:18px;font-weight:600;line-height:1.3;color:var(--text)}
   .footer-grid{grid-template-columns:1.4fr 1fr 1fr}
   .cap-layout{grid-template-columns:0.85fr 1.15fr;gap:56px}
   .cap-sticky{position:sticky;top:120px}
+  .hashgrid{grid-template-columns:repeat(2,1fr);gap:16px}
 }
 @media (min-width:1000px){
   :root{--pad:32px}
@@ -735,9 +892,28 @@ h3{font-size:18px;font-weight:600;line-height:1.3;color:var(--text)}
 @media (prefers-reduced-motion:no-preference){
   html{scroll-behavior:smooth}
 }
+/* ---------- No-JS fallbacks ----------
+   Without JS there is no hamburger toggle, so the section links are shown as a
+   plain horizontal row and the sticky bar sits statically at the end of the
+   hero instead of being fixed. */
+.no-js .hamburger,.no-js .mobile-panel{display:none!important}
+.no-js .nav-inner{flex-wrap:wrap}
+.no-js .nav-links{
+  display:flex!important;flex-wrap:wrap;gap:4px 16px;width:100%;
+  padding:10px 0 4px;border-top:1px solid var(--border);margin-top:10px;
+}
+.no-js .nav-cta{display:inline-flex!important;margin-left:0}
+.no-js .stickybar{
+  position:static;transform:none;display:block;margin-top:28px;
+  background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none;
+  border-top:0;padding:0;
+}
+.no-js .stickybar .btn{width:auto}
+.no-js footer.footer{padding-bottom:40px}
 </style>
 </head>
 <body>
+<a class="skip" href="#top">Skip to content</a>
 <div class="atmos" aria-hidden="true">
   <div class="atmos-glow"></div>
   <div class="atmos-grid"></div>
@@ -749,7 +925,7 @@ h3{font-size:18px;font-weight:600;line-height:1.3;color:var(--text)}
   <div class="nav-inner">
     <a class="brand" href="#top" aria-label="OpenHands Mobile home">
       <span class="brand-mark" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M4 12a8 8 0 0 1 8-8v16a8 8 0 0 1-8-8Z" fill="#0B0B10"/><path d="M12 4a8 8 0 0 1 0 16V4Z" fill="#0B0B10" opacity=".55"/><circle cx="12" cy="12" r="3.4" fill="#0B0B10"/></svg>
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M4 12a8 8 0 0 1 8-8v16a8 8 0 0 1-8-8Z" fill="#0B0B10"/><path d="M12 4a8 8 0 0 1 0 16V4Z" fill="#0B0B10" opacity=".55"/><circle cx="12" cy="12" r="3.4" fill="#0B0B10"/></svg>
       </span>
       <span class="brand-name">OpenHands Mobile</span>
     </a>
@@ -791,12 +967,12 @@ h3{font-size:18px;font-weight:600;line-height:1.3;color:var(--text)}
 <main class="page" id="top">
 
 <!-- ============================ HERO ============================ -->
-<section class="hero">
+<section class="hero" aria-labelledby="hero-h">
   <div class="container">
     <div class="hero-head">
       <span class="badge" id="h-badge"><span class="dot"></span>Android · sideload · MIT</span>
 
-      <h1>
+      <h1 id="hero-h">
         <span class="hline"><span id="hl1">Your AI coding agents, in your</span></span>
         <span class="hline"><span id="hl2" class="grad">pocket.</span></span>
       </h1>
@@ -903,42 +1079,42 @@ h3{font-size:18px;font-weight:600;line-height:1.3;color:var(--text)}
 </section>
 
 <!-- ============================ OVERVIEW ============================ -->
-<section class="section" id="overview">
+<section class="section" id="overview" aria-labelledby="overview-h">
   <div class="container">
     <div class="section-head" data-reveal>
       <span class="eyebrow"><span class="dot"></span>01 · Overview</span>
-      <h2>What this actually <span class="muted">is.</span></h2>
+      <h2 id="overview-h">What this actually <span class="muted">is.</span></h2>
       <p class="lead">OpenHands Agent Canvas is the web interface for OpenHands, an open-source AI software engineer. This project wraps that interface in a thin Capacitor shell so it installs and runs like any other Android app. You still point it at your own OpenHands backend. The app is the client, not the server.</p>
     </div>
 
     <div class="grid grid-3" style="margin-top:40px" data-stagger>
       <article class="card">
-        <span class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="6" y="2.5" width="12" height="19" rx="3"/><path d="M10.5 5.5h3"/></svg></span>
+        <span class="card-icon" aria-hidden="true"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="6" y="2.5" width="12" height="19" rx="3"/><path d="M10.5 5.5h3"/></svg></span>
         <h3>A real app, not a shortcut</h3>
         <p>Native Android package with its own launcher icon, splash screen and back-button handling. Not a browser bookmark.</p>
       </article>
       <article class="card">
-        <span class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3v18M5 8l7-5 7 5M5 16l7 5 7-5"/></svg></span>
+        <span class="card-icon" aria-hidden="true"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3v18M5 8l7-5 7 5M5 16l7 5 7-5"/></svg></span>
         <h3>Universal build</h3>
         <p>One APK for every device. No native libraries and no ABI split, so it installs on arm64, armv7 and x86.</p>
       </article>
       <article class="card">
-        <span class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3l8 4v5c0 5-3.4 8.3-8 9-4.6-.7-8-4-8-9V7l8-4Z"/><path d="M9 12l2 2 4-4"/></svg></span>
+        <span class="card-icon" aria-hidden="true"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3l8 4v5c0 5-3.4 8.3-8 9-4.6-.7-8-4-8-9V7l8-4Z"/><path d="M9 12l2 2 4-4"/></svg></span>
         <h3>Minimal permissions</h3>
         <p>INTERNET and nothing else. No storage, no contacts, no location, no advertising ID.</p>
       </article>
       <article class="card">
-        <span class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7a8 8 0 0 1 15-1M20 17a8 8 0 0 1-15 1"/><path d="M19 3v4h-4M5 21v-4h4"/></svg></span>
+        <span class="card-icon" aria-hidden="true"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7a8 8 0 0 1 15-1M20 17a8 8 0 0 1-15 1"/><path d="M19 3v4h-4M5 21v-4h4"/></svg></span>
         <h3>Reproducible</h3>
         <p>Every release is built from source in public by GitHub Actions. The workflow is committed, so you can audit or rerun it.</p>
       </article>
       <article class="card">
-        <span class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+        <span class="card-icon" aria-hidden="true"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
         <h3>Runs on old hardware</h3>
         <p>Targets Android 6.0 (API 23) and up, so it works on phones that no longer receive updates.</p>
       </article>
       <article class="card">
-        <span class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v.01M11 12h1v4h1"/></svg></span>
+        <span class="card-icon" aria-hidden="true"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v.01M11 12h1v4h1"/></svg></span>
         <h3>Honest about its limits</h3>
         <p>A community packaging, not an official OpenHands release. It needs a backend you control to be useful.</p>
       </article>
@@ -947,12 +1123,12 @@ h3{font-size:18px;font-weight:600;line-height:1.3;color:var(--text)}
 </section>
 
 <!-- ============================ CAPABILITIES ============================ -->
-<section class="section" id="features">
+<section class="section" id="features" aria-labelledby="features-h">
   <div class="container">
     <div class="cap-layout">
       <div class="cap-sticky" data-reveal>
         <span class="eyebrow"><span class="dot"></span>02 · Capabilities</span>
-        <h2 style="margin-top:14px">Everything the web UI does, on a <span class="grad">phone.</span></h2>
+        <h2 id="features-h" style="margin-top:14px">Everything the web UI does, on a <span class="grad">phone.</span></h2>
         <p class="lead" style="margin-top:18px">The app ships the actual Agent Canvas bundle, so the feature set tracks upstream: conversations, file diffs, terminal output and multi-step agent runs, rendered for touch.</p>
       </div>
 
@@ -960,43 +1136,43 @@ h3{font-size:18px;font-weight:600;line-height:1.3;color:var(--text)}
         <div class="cap-row">
           <span class="cap-num">01</span>
           <div class="cap-body"><h3>Agent conversations</h3><p>Start a task in plain language and watch the agent plan, run tools and report back step by step.</p></div>
-          <span class="cap-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+          <span class="cap-arrow" aria-hidden="true"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
         </div>
         <div class="cap-row">
           <span class="cap-num">02</span>
           <div class="cap-body"><h3>Live code diffs</h3><p>See exactly which files changed and what was edited before anything is merged.</p></div>
-          <span class="cap-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+          <span class="cap-arrow" aria-hidden="true"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
         </div>
         <div class="cap-row">
           <span class="cap-num">03</span>
           <div class="cap-body"><h3>Terminal output</h3><p>Command output streams into the conversation, so failures are visible while they happen.</p></div>
-          <span class="cap-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+          <span class="cap-arrow" aria-hidden="true"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
         </div>
         <div class="cap-row">
           <span class="cap-num">04</span>
           <div class="cap-body"><h3>Session history</h3><p>Reopen earlier conversations and pick up a task where you left it.</p></div>
-          <span class="cap-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+          <span class="cap-arrow" aria-hidden="true"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
         </div>
         <div class="cap-row">
           <span class="cap-num">05</span>
           <div class="cap-body"><h3>Your own backend</h3><p>Point it at a self-hosted OpenHands server. Nothing is routed through a third party.</p></div>
-          <span class="cap-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+          <span class="cap-arrow" aria-hidden="true"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
         </div>
         <div class="cap-row">
           <span class="cap-num">06</span>
           <div class="cap-body"><h3>Launches offline</h3><p>The shell starts without a network. Only agent calls need connectivity.</p></div>
-          <span class="cap-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+          <span class="cap-arrow" aria-hidden="true"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
         </div>
       </div>
     </div>
   </div>
 </section>
 <!-- ============================ INSTALL ============================ -->
-<section class="section" id="install">
+<section class="section" id="install" aria-labelledby="install-h">
   <div class="container">
     <div class="section-head" data-reveal>
       <span class="eyebrow"><span class="dot"></span>03 · Install</span>
-      <h2>Four steps, about a minute.</h2>
+      <h2 id="install-h">Four steps, about a minute.</h2>
       <p class="lead">Android will warn you about installing outside the Play Store. That warning is expected for any sideloaded app.</p>
     </div>
 
@@ -1044,120 +1220,179 @@ h3{font-size:18px;font-weight:600;line-height:1.3;color:var(--text)}
 </section>
 
 <!-- ============================ VERIFY ============================ -->
-<section class="section" id="verify">
+<section class="section" id="verify" aria-labelledby="verify-h">
   <div class="container">
     <div class="section-head" data-reveal>
       <span class="eyebrow"><span class="dot"></span>04 · Verify</span>
-      <h2>Check the build yourself.</h2>
-      <p class="lead">Every download is a signed, reproducible artifact. Compare the hashes below with the file you received before you install it.</p>
+      <h2 id="verify-h">Check the file before you trust it.</h2>
+      <p class="lead">Compare the hash of the APK you downloaded with the values below. If they differ, do not install it. Delete the file and download it again from the official release page.</p>
     </div>
 
     <div class="hashgrid" data-stagger>
       <div class="hashcard">
-        <h3>APK · SHA-256</h3>
-        <button class="copy" data-copy="f7a5805bc588370c7f4aa858ff8721f931ba67c611a282186ca8b0754c460613" aria-label="Copy APK SHA-256">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg>
-        </button>
-        <code>f7a5805bc588370c7f4aa858ff8721f931ba67c611a282186ca8b0754c460613</code>
+        <h3>Release APK · SHA-256</h3>
+        <p class="hash-sub">app-release.apk · 6,257,708 bytes</p>
+        <div class="hashrow">
+          <code id="hash-apk">f7a5805bc588370c7f4aa858ff8721f931ba67c611a282186ca8b0754c460613</code>
+          <button class="copy" data-copy="f7a5805bc588370c7f4aa858ff8721f931ba67c611a282186ca8b0754c460613" aria-label="Copy the release APK SHA-256">
+            <span class="cb-icon" aria-hidden="true"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg></span>
+            <span class="cb-text">Copy</span>
+          </button>
+        </div>
       </div>
 
       <div class="hashcard">
-        <h3>Signer cert · SHA-256</h3>
-        <button class="copy" data-copy="0D96FA458C3442D228ACC8569704104A4E83443A680EDF81C6AE0DD16DDA8112" aria-label="Copy signer certificate SHA-256">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg>
-        </button>
-        <code>0D:96:FA:45:8C:34:42:D2:28:AC:C8:56:97:04:10:4A:4E:83:44:3A:68:0E:DF:81:C6:AE:0D:D1:6D:DA:81:12</code>
-      </div>
-
-      <div class="hashcard">
-        <h3>APK · size</h3>
-        <code>6,257,708 bytes</code>
+        <h3>Signer certificate · SHA-256</h3>
+        <p class="hash-sub">Compare with apksigner verify --print-certs</p>
+        <div class="hashrow">
+          <code id="hash-cert">0D:96:FA:45:8C:34:42:D2:28:AC:C8:56:97:04:10:4A:4E:83:44:3A:68:0E:DF:81:C6:AE:0D:D1:6D:DA:81:12</code>
+          <button class="copy" data-copy="0D96FA458C3442D228ACC8569704104A4E83443A680EDF81C6AE0DD16DDA8112" aria-label="Copy the signer certificate SHA-256">
+            <span class="cb-icon" aria-hidden="true"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg></span>
+            <span class="cb-text">Copy</span>
+          </button>
+        </div>
       </div>
     </div>
+    <p class="sr-only" id="copy-status" role="status" aria-live="polite"></p>
 
     <div class="term" data-reveal>
-      <pre><span class="c"># Compare the hash with the value above</span>
-sha256sum app-release.apk
+      <div class="tabs" role="tablist" aria-label="Verification commands">
+        <button class="tab" role="tab" id="tab-linux" aria-controls="panel-linux" aria-selected="true" tabindex="0">Linux / macOS</button>
+        <button class="tab" role="tab" id="tab-win" aria-controls="panel-win" aria-selected="false" tabindex="-1">Windows PowerShell</button>
+        <button class="tab" role="tab" id="tab-pkg" aria-controls="panel-pkg" aria-selected="false" tabindex="-1">Package check</button>
+        <span class="tab-underline" id="tab-underline" aria-hidden="true"></span>
+      </div>
 
-<span class="c"># Confirm the signer certificate</span>
-apksigner verify --print-certs app-release.apk
-
-<span class="c"># Package and version</span>
-aapt dump badging app-release.apk | head -1
+      <div class="tabpanels">
+        <div class="tabpanel is-active" role="tabpanel" id="panel-linux" aria-labelledby="tab-linux" tabindex="0">
+          <pre>sha256sum app-release.apk</pre>
+        </div>
+        <div class="tabpanel" role="tabpanel" id="panel-win" aria-labelledby="tab-win" tabindex="0" hidden>
+          <pre>Get-FileHash app-release.apk -Algorithm SHA256</pre>
+        </div>
+        <div class="tabpanel" role="tabpanel" id="panel-pkg" aria-labelledby="tab-pkg" tabindex="0" hidden>
+          <pre>aapt dump badging app-release.apk | head -1
+<span class="c"># expected output</span>
 <span class="k">package: name='dev.openhands.agentcanvas' versionName='1.27.2'</span></pre>
+        </div>
+      </div>
+
+      <button class="copy copy-wide" data-copy="sha256sum app-release.apk" aria-label="Copy the verification command">
+        <span class="cb-icon" aria-hidden="true"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg></span>
+        <span class="cb-text">Copy</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ REQUIREMENTS ============================ -->
+<section class="section" id="requirements" aria-labelledby="req-h">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow"><span class="dot"></span>05 · Requirements</span>
+      <h2 id="req-h">What you need before you start.</h2>
+    </div>
+
+    <div class="specgrid" data-stagger id="specgrid">
+      <div class="spec"><span class="spec-k">Android version</span><span class="spec-v" data-count="6.0" data-decimals="1" data-suffix=" (API 23) or newer">6.0 (API 23) or newer</span></div>
+      <div class="spec"><span class="spec-k">Architecture</span><span class="spec-v">Universal, all ABIs</span></div>
+      <div class="spec"><span class="spec-k">Permissions</span><span class="spec-v">INTERNET only</span></div>
+      <div class="spec"><span class="spec-k">Download size</span><span class="spec-v" data-count="6.0" data-decimals="1" data-suffix=" MB">6.0 MB</span></div>
+      <div class="spec"><span class="spec-k">Installed size</span><span class="spec-v" data-count="12" data-prefix="about " data-suffix=" MB">about 12 MB</span></div>
+      <div class="spec"><span class="spec-k">OpenHands backend</span><span class="spec-v">Required for agent features</span></div>
+      <div class="spec"><span class="spec-k">Play Store</span><span class="spec-v">Not required</span></div>
+      <div class="spec"><span class="spec-k">License</span><span class="spec-v">MIT</span></div>
     </div>
   </div>
 </section>
 
 <!-- ============================ FAQ ============================ -->
-<section class="section" id="faq">
+<section class="section" id="faq" aria-labelledby="faq-h">
   <div class="container">
     <div class="section-head" data-reveal>
-      <span class="eyebrow"><span class="dot"></span>05 · FAQ</span>
-      <h2>Questions people actually ask.</h2>
+      <span class="eyebrow"><span class="dot"></span>06 · FAQ</span>
+      <h2 id="faq-h">Common questions.</h2>
     </div>
 
     <div class="faq" data-stagger>
       <details>
-        <summary>Is this an official OpenHands release?<span class="pm" aria-hidden="true"></span></summary>
-        <div class="ans">No. This is an independent, community packaging of the OpenHands Agent Canvas web interface. All credit for the application itself belongs to the OpenHands project and its contributors.</div>
+        <summary><span>Is it safe to install?</span><span class="pm" aria-hidden="true"></span></summary>
+        <div class="ans"><div class="ans-in">Verify the SHA-256 hash in the section above before installing. The app requests only the INTERNET permission. Builds are produced in public by GitHub Actions, and the workflow is committed so you can audit it.</div></div>
       </details>
       <details>
-        <summary>Do I need an OpenHands backend?<span class="pm" aria-hidden="true"></span></summary>
-        <div class="ans">Yes, for the agent features. The app is the client. Point it at a self-hosted OpenHands server you control, and nothing is routed through a third party.</div>
+        <summary><span>Why does Play Protect show a warning?</span><span class="pm" aria-hidden="true"></span></summary>
+        <div class="ans"><div class="ans-in">Play Protect warns about any app installed outside the Play Store. This is expected for sideloaded apps. After verifying the hash, tap “Install anyway”.</div></div>
       </details>
       <details>
-        <summary>Does it work without the Play Store?<span class="pm" aria-hidden="true"></span></summary>
-        <div class="ans">That is the whole point. You sideload the APK directly from GitHub Releases. Android shows a standard sideload warning, which is expected.</div>
+        <summary><span>Is this an official OpenHands app?</span><span class="pm" aria-hidden="true"></span></summary>
+        <div class="ans"><div class="ans-in">No. This is a community packaging of OpenHands Agent Canvas and is not affiliated with or endorsed by the OpenHands team.</div></div>
       </details>
       <details>
-        <summary>What permissions does it request?<span class="pm" aria-hidden="true"></span></summary>
-        <div class="ans">Only INTERNET. No storage, no contacts, no location, and no advertising ID.</div>
+        <summary><span>Does it work offline?</span><span class="pm" aria-hidden="true"></span></summary>
+        <div class="ans"><div class="ans-in">The app launches without a network connection. Agent features need connectivity to your OpenHands backend.</div></div>
       </details>
       <details>
-        <summary>Which Android versions are supported?<span class="pm" aria-hidden="true"></span></summary>
-        <div class="ans">Android 6.0 (API 23) and up. The APK is universal, so the same file installs on arm64, armv7 and x86 devices.</div>
-      </details>
-      <details>
-        <summary>How do I get updates?<span class="pm" aria-hidden="true"></span></summary>
-        <div class="ans">Download the latest APK again, or add the app to Obtainium and it will notify you when a new release is published.</div>
-      </details>
-      <details>
-        <summary>Why does Android warn me during install?<span class="pm" aria-hidden="true"></span></summary>
-        <div class="ans">Any app installed outside the Play Store triggers that warning. You can verify the build against the published hashes before installing.</div>
+        <summary><span>Do I need a Play Store account?</span><span class="pm" aria-hidden="true"></span></summary>
+        <div class="ans"><div class="ans-in">No. There is no account, no sign-up, and no telemetry.</div></div>
       </details>
     </div>
   </div>
 </section>
 
 <!-- ============================ SUPPORT ============================ -->
-<section class="section" id="support">
+<section class="section support" id="support" aria-labelledby="support-h">
+  <span class="support-glow" aria-hidden="true"></span>
   <div class="container">
     <div class="section-head" data-reveal>
-      <span class="eyebrow"><span class="dot"></span>06 · Support</span>
-      <h2>Free forever. Tips optional.</h2>
-      <p class="lead">This app is free and open source, and it always will be. You do not have to pay anything to download it, use it, or modify it. If it saved you some time and you feel like saying thanks, a small tip is genuinely appreciated — and completely optional.</p>
+      <span class="eyebrow"><span class="dot"></span>07 · Support</span>
+      <h2 id="support-h">Free forever. Tips optional.</h2>
+      <p class="lead">This app is free and open source, and it always will be. You never have to pay to download it, use it, or modify it. If it saved you time and you want to say thanks, a small tip is appreciated. It is entirely optional.</p>
     </div>
 
     <div class="support-card" data-reveal>
-      <div>
-        <p class="eyebrow" style="margin-bottom:12px">Pay via UPI (India)</p>
-        <div class="upi">
-          <span>mrsameer1906@okhdfcbank</span>
-          <button class="copy" data-copy="mrsameer1906@okhdfcbank" aria-label="Copy UPI ID" style="position:static">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg>
+      <div class="upi-block">
+        <span class="spec-k">UPI ID</span>
+        <div class="hashrow">
+          <code id="upi-id">mrsameer1906@okhdfcbank</code>
+          <button class="copy" data-copy="mrsameer1906@okhdfcbank" aria-label="Copy the UPI ID">
+            <span class="cb-icon" aria-hidden="true"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg></span>
+            <span class="cb-text">Copy</span>
           </button>
         </div>
-        <p class="muted" style="font-size:13.5px;margin-top:12px">No amount is suggested and nothing is expected. Give only if you want to, and only what you are comfortable with.</p>
-        <ul class="free-list">
-          <li>Star the repository so more people can find it.</li>
-          <li>Report a bug or suggest an improvement in Issues.</li>
-          <li>Share the app with someone who would use it.</li>
-        </ul>
+        <p class="upi-help">Pay via any UPI app: GPay, PhonePe, Paytm, BHIM, or your bank’s app. No amount is suggested and nothing is expected.</p>
+
+        <button class="disclosure" id="qr-toggle" aria-expanded="false" aria-controls="qr-panel">
+          <span class="disc-arrow" aria-hidden="true"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg></span>
+          Show QR code
+        </button>
+        <div class="qr-panel" id="qr-panel" hidden>
+          <figure class="tip-qr">
+            <img src="assets/upi-qr.png" alt="UPI QR code for mrsameer1906@okhdfcbank" width="564" height="564" loading="lazy" decoding="async">
+          </figure>
+        </div>
       </div>
-      <figure class="tip-qr">
-        <img src="assets/upi-qr.png" alt="UPI QR code for mrsameer1906@okhdfcbank" width="564" height="564" loading="lazy" decoding="async">
-      </figure>
+
+      <div class="help-block">
+        <h3>Other ways to help, completely free</h3>
+        <ul class="help-list">
+          <li><span class="help-ico" aria-hidden="true"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m12 3 2.6 5.6 6.1.8-4.5 4.2 1.2 6-5.4-3-5.4 3 1.2-6L3.3 9.4l6.1-.8L12 3Z"/></svg></span>Star the repository so more people can find it.</li>
+          <li><span class="help-ico" aria-hidden="true"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 8v.01M11 12h1v5h1"/><circle cx="12" cy="12" r="9"/></svg></span>Report a bug or suggest an improvement in Issues.</li>
+          <li><span class="help-ico" aria-hidden="true"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 5h16v11H8l-4 4V5Z"/></svg></span>Tell someone who would find a mobile OpenHands client useful.</li>
+          <li><span class="help-ico" aria-hidden="true"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="6" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="12" r="2.5"/><path d="M8.2 7.3 15.8 11M8.2 16.7 15.8 13"/></svg></span>Send a fix or a feature through a pull request.</li>
+        </ul>
+
+        <div class="support-cta">
+          <a class="btn btn-primary" href="https://github.com/mrvoidxin/openhands-mobile" target="_blank" rel="noopener">
+            <span class="shine" aria-hidden="true"></span>
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.89 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"/></svg>
+            Star on GitHub
+          </a>
+          <a class="btn btn-ghost" href="https://github.com/mrvoidxin/openhands-mobile/issues" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 8v.01M11 12h1v5h1"/><circle cx="12" cy="12" r="9"/></svg>
+            Open an issue
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -1167,25 +1402,20 @@ aapt dump badging app-release.apk | head -1
 <!-- ============================ FOOTER ============================ -->
 <footer class="footer">
   <div class="container">
-    <div class="disclaimer" data-reveal>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v.01M11 12h1v4h1"/></svg>
-      <p><strong>Not an official release.</strong> This project is not affiliated with or endorsed by the OpenHands team. All credit for the application itself belongs to the OpenHands project and its contributors.</p>
-    </div>
-
-    <div class="footer-grid" style="margin-top:44px">
+    <div class="footer-grid">
       <div>
         <span class="footer-brand">
           <span class="brand-mark" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none"><path d="M4 12a8 8 0 0 1 8-8v16a8 8 0 0 1-8-8Z" fill="#0B0B10"/><path d="M12 4a8 8 0 0 1 0 16V4Z" fill="#0B0B10" opacity=".55"/><circle cx="12" cy="12" r="3.4" fill="#0B0B10"/></svg>
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M4 12a8 8 0 0 1 8-8v16a8 8 0 0 1-8-8Z" fill="#0B0B10"/><path d="M12 4a8 8 0 0 1 0 16V4Z" fill="#0B0B10" opacity=".55"/><circle cx="12" cy="12" r="3.4" fill="#0B0B10"/></svg>
           </span>
           OpenHands Mobile
         </span>
-        <p>An open-source Android client for the OpenHands Agent Canvas. MIT licensed. Built by Sameer (@mrvoidxin).</p>
+        <p>Community Android packaging of OpenHands Agent Canvas. Packaged and maintained by Sameer (@mrvoidxin). Released under the MIT license.</p>
       </div>
       <div>
         <h4>Project</h4>
         <ul>
-          <li><a href="https://github.com/mrvoidxin/openhands-mobile" target="_blank" rel="noopener">Repository</a></li>
+          <li><a href="https://github.com/mrvoidxin/openhands-mobile" target="_blank" rel="noopener">Source</a></li>
           <li><a href="https://github.com/mrvoidxin/openhands-mobile/releases" target="_blank" rel="noopener">Releases</a></li>
           <li><a href="https://github.com/mrvoidxin/openhands-mobile/issues" target="_blank" rel="noopener">Issues</a></li>
           <li><a href="https://github.com/mrvoidxin/openhands-mobile/blob/main/README.md" target="_blank" rel="noopener">README</a></li>
@@ -1203,11 +1433,20 @@ aapt dump badging app-release.apk | head -1
     </div>
 
     <div class="footer-bottom">
-      <span>MIT licensed · Not an official OpenHands release.</span>
-      <span class="mono">v1.27.2 · dev.openhands.agentcanvas</span>
+      <p class="disclaimer-line"><strong>Not an official release.</strong> This project is not affiliated with or endorsed by the OpenHands team.</p>
+      <p class="copyright">© 2026 Sameer (@mrvoidxin). MIT License.</p>
     </div>
   </div>
 </footer>
+
+<!-- ============================ MOBILE STICKY DOWNLOAD BAR ============================ -->
+<div class="stickybar" id="stickybar">
+  <a class="btn btn-primary" href="https://github.com/mrvoidxin/openhands-mobile/releases/latest/download/app-release.apk">
+    <span class="shine" aria-hidden="true"></span>
+    Download APK · 6.0 MB
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 19h16"/></svg>
+  </a>
+</div>
 
 <script>
 (function(){
@@ -1322,8 +1561,8 @@ aapt dump badging app-release.apk | head -1
   var CYCLE = 10500;   // 9s of script + 1.5s pause
   var chatTimer = null, typeTimer = null;
 
-  var spinSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 3a9 9 0 1 0 9 9"/></svg>';
-  var checkSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg>';
+  var spinSvg = '<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 3a9 9 0 1 0 9 9"/></svg>';
+  var checkSvg = '<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg>';
 
   function msg(n){ return document.querySelector('.msg[data-m="' + n + '"]'); }
 
@@ -1425,6 +1664,7 @@ aapt dump badging app-release.apk | head -1
       entries.forEach(function(e){
         if (e.isIntersecting){
           e.target.classList.add("is-visible");
+          e.target.dispatchEvent(new CustomEvent("revealed", {bubbles:true}));
           io.unobserve(e.target);
         }
       });
@@ -1539,31 +1779,241 @@ aapt dump badging app-release.apk | head -1
   }
 
   /* ---------------------------------------------------------
-     Copy buttons
+     Copy buttons: swap the icon to a checkmark and the label to
+     "Copied" for 1.5s, and announce the result via #copy-status.
+     Falls back to execCommand, then to an inline failure notice.
      --------------------------------------------------------- */
+  var status = document.getElementById("copy-status");
+  var CHECK = '<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m4 12.5 5 5L20 6.5"/></svg>';
+  var COPY = '<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg>';
+
+  function announce(msg){ if (status) status.textContent = msg; }
+
   document.querySelectorAll(".copy").forEach(function(btn){
+    var icon = btn.querySelector(".cb-icon");
+    var label = btn.querySelector(".cb-text");
+    var timer = null;
+    var idleLabel = label ? label.textContent : "";
+
+    function done(msg){
+      btn.classList.add("done");
+      if (icon) icon.innerHTML = CHECK;
+      if (label) label.textContent = "Copied";
+      announce(msg);
+      clearTimeout(timer);
+      timer = setTimeout(function(){
+        btn.classList.remove("done");
+        if (icon) icon.innerHTML = COPY;
+        if (label) label.textContent = idleLabel;
+      }, 1500);
+    }
+
+    function failed(){
+      if (label) label.textContent = "Copy failed";
+      announce("Copy failed. Select the text manually.");
+      clearTimeout(timer);
+      timer = setTimeout(function(){ if (label) label.textContent = idleLabel; }, 2500);
+    }
+
+    function execFallback(){
+      var ta = document.createElement("textarea");
+      ta.value = btn.getAttribute("data-copy") || "";
+      ta.setAttribute("readonly", "");
+      ta.style.position = "fixed";
+      ta.style.top = "-1000px";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = false;
+      try { ok = document.execCommand("copy"); } catch(e){ ok = false; }
+      document.body.removeChild(ta);
+      if (ok) done("Copied to the clipboard."); else failed();
+    }
+
     btn.addEventListener("click", function(){
       var text = btn.getAttribute("data-copy") || "";
-      function ok(){
-        btn.classList.add("done");
-        setTimeout(function(){ btn.classList.remove("done"); }, 1400);
-      }
-      function fallback(){
-        var ta = document.createElement("textarea");
-        ta.value = text; ta.setAttribute("readonly","");
-        ta.style.position = "fixed"; ta.style.opacity = "0";
-        document.body.appendChild(ta);
-        ta.select();
-        try { document.execCommand("copy"); ok(); } catch(e){}
-        document.body.removeChild(ta);
-      }
       if (navigator.clipboard && navigator.clipboard.writeText){
-        navigator.clipboard.writeText(text).then(ok, fallback);
+        navigator.clipboard.writeText(text).then(
+          function(){ done("Copied to the clipboard."); },
+          execFallback
+        );
       } else {
-        fallback();
+        execFallback();
       }
     });
   });
+
+  /* ---------------------------------------------------------
+     Verify tabs (roving tabindex, sliding underline, 200ms fade)
+     --------------------------------------------------------- */
+  var tablist = document.querySelector(".tabs");
+  if (tablist){
+    var tabs = Array.prototype.slice.call(tablist.querySelectorAll('[role="tab"]'));
+    var underline = document.getElementById("tab-underline");
+
+    function placeUnderline(tab){
+      if (!underline) return;
+      underline.style.width = tab.offsetWidth + "px";
+      underline.style.transform = "translateX(" + tab.offsetLeft + "px)";
+    }
+
+    function select(tab, focus){
+      tabs.forEach(function(t){
+        var on = t === tab;
+        t.setAttribute("aria-selected", on ? "true" : "false");
+        t.tabIndex = on ? 0 : -1;
+        var p = document.getElementById(t.getAttribute("aria-controls"));
+        if (!p) return;
+        if (on){
+          p.hidden = false;
+          // next frame so the opacity transition actually runs
+          requestAnimationFrame(function(){ p.classList.add("is-active"); });
+        } else {
+          p.classList.remove("is-active");
+          p.hidden = true;
+        }
+      });
+      placeUnderline(tab);
+      if (focus) tab.focus();
+    }
+
+    tabs.forEach(function(tab, i){
+      tab.addEventListener("click", function(){ select(tab, false); });
+      tab.addEventListener("keydown", function(e){
+        var next = null;
+        if (e.key === "ArrowRight") next = tabs[(i + 1) % tabs.length];
+        else if (e.key === "ArrowLeft") next = tabs[(i - 1 + tabs.length) % tabs.length];
+        else if (e.key === "Home") next = tabs[0];
+        else if (e.key === "End") next = tabs[tabs.length - 1];
+        if (next){ e.preventDefault(); select(next, true); }
+      });
+    });
+
+    var initial = tabs.filter(function(t){ return t.getAttribute("aria-selected") === "true"; })[0] || tabs[0];
+    if (initial){
+      if (document.fonts && document.fonts.ready){
+        document.fonts.ready.then(function(){ placeUnderline(initial); });
+      }
+      placeUnderline(initial);
+    }
+    window.addEventListener("resize", function(){
+      var sel = tabs.filter(function(t){ return t.getAttribute("aria-selected") === "true"; })[0];
+      if (sel) placeUnderline(sel);
+    });
+  }
+
+  /* ---------------------------------------------------------
+     Requirements: count numeric values up on first reveal
+     --------------------------------------------------------- */
+  var specgrid = document.getElementById("specgrid");
+  if (specgrid){
+    var counted = false;
+    function countUp(el){
+      var target = parseFloat(el.getAttribute("data-count"));
+      var dec = parseInt(el.getAttribute("data-decimals") || "0", 10);
+      var prefix = el.getAttribute("data-prefix") || "";
+      var suffix = el.getAttribute("data-suffix") || "";
+      if (isNaN(target)) return;
+      if (reduce){ el.textContent = prefix + target.toFixed(dec) + suffix; return; }
+      var dur = 1200, t0 = null;
+      function frame(ts){
+        if (t0 === null) t0 = ts;
+        var p = Math.min(1, (ts - t0) / dur);
+        var eased = 1 - Math.pow(1 - p, 3);   // ease-out cubic
+        el.textContent = prefix + (target * eased).toFixed(dec) + suffix;
+        if (p < 1) requestAnimationFrame(frame);
+        else el.textContent = prefix + target.toFixed(dec) + suffix;
+      }
+      requestAnimationFrame(frame);
+    }
+    function runCounts(){
+      if (counted) return;
+      counted = true;
+      specgrid.querySelectorAll("[data-count]").forEach(countUp);
+    }
+    specgrid.addEventListener("revealed", runCounts);
+    if (specgrid.classList.contains("is-visible")) runCounts();
+  }
+
+  /* ---------------------------------------------------------
+     FAQ: measure-and-animate the answer height
+     --------------------------------------------------------- */
+  document.querySelectorAll(".faq details").forEach(function(d){
+    var ans = d.querySelector(".ans");
+    var summary = d.querySelector("summary");
+    if (!ans || !summary) return;
+
+    summary.setAttribute("aria-expanded", d.open ? "true" : "false");
+
+    summary.addEventListener("click", function(e){
+      if (reduce) return;   // let the native toggle happen instantly
+      e.preventDefault();
+      if (d.open){ closeDetail(d, ans); } else { openDetail(d, ans); }
+    });
+
+    function openDetail(det, box){
+      det.open = true;
+      summary.setAttribute("aria-expanded", "true");
+      box.classList.add("measuring");
+      var h = box.scrollHeight;
+      box.classList.remove("measuring");
+      box.style.height = "0px";
+      box.style.opacity = "0";
+      requestAnimationFrame(function(){
+        box.style.height = h + "px";
+        box.style.opacity = "1";
+      });
+      var settle = function(){
+        box.style.height = "auto";
+        box.removeEventListener("transitionend", settle);
+      };
+      box.addEventListener("transitionend", settle);
+    }
+
+    function closeDetail(det, box){
+      box.style.height = box.scrollHeight + "px";
+      requestAnimationFrame(function(){
+        box.style.height = "0px";
+        box.style.opacity = "0";
+      });
+      var settle = function(ev){
+        if (ev.target !== box) return;
+        det.open = false;
+        box.style.height = "";
+        box.removeEventListener("transitionend", settle);
+      };
+      box.addEventListener("transitionend", settle);
+      summary.setAttribute("aria-expanded", "false");
+    }
+  });
+
+  /* ---------------------------------------------------------
+     Support: QR disclosure + sticky mobile download bar
+     --------------------------------------------------------- */
+  var qrToggle = document.getElementById("qr-toggle");
+  var qrPanel = document.getElementById("qr-panel");
+  if (qrToggle && qrPanel){
+    qrToggle.addEventListener("click", function(){
+      var open = qrToggle.getAttribute("aria-expanded") === "true";
+      qrToggle.setAttribute("aria-expanded", open ? "false" : "true");
+      qrPanel.hidden = open;
+    });
+  }
+
+  var sticky = document.getElementById("stickybar");
+  var hero = document.querySelector(".hero");
+  if (sticky && hero){
+    if ("IntersectionObserver" in window){
+      var heroIO = new IntersectionObserver(function(entries){
+        entries.forEach(function(en){
+          sticky.classList.toggle("is-up", !en.isIntersecting);
+        });
+      }, {threshold:0});
+      heroIO.observe(hero);
+    } else {
+      sticky.classList.add("is-up");
+    }
+  }
 
   /* ---------------------------------------------------------
      Mobile menu

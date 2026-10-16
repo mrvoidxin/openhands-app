@@ -17,10 +17,14 @@ GitHub Pages serves `docs/` at https://mrvoidxin.github.io/openhands-mobile/ .
 via GitHub Releases + an Obtainium badge instead. Details in `2026-10-15.md`.
 
 `docs/index.html` is a hand-written, animation-heavy single-file landing page.
-It is fully self-contained (only the two `docs/assets/*.png`). **Do not expect
+It is fully self-contained (only the `docs/assets/*.png`). **Do not expect
 headless Chromium to verify its scroll/motion** — rAF advances one frame and
 smooth scrolling never animates under `--virtual-time-budget`; see the daily log
-for what can and cannot be tested that way.
+for what can and cannot be tested that way. It was **rebuilt** on 2026-10-16
+(nav > hero > product > features > install > verify > requirements > faq >
+support > footer, UPI QR in support); see `2026-10-16.md` for the layout and the
+real-browser bugs it fixed. **Pages source is `main:/docs`, `legacy` build** —
+pushing to `main` is the deploy, no workflow involved.
 
 **Permanent download links (GitHub Releases, never goes down):**
 https://github.com/mrvoidxin/openhands-mobile/releases/latest/download/app-release.apk
@@ -65,9 +69,21 @@ so the documented hash must be refreshed after every publish.
 ### Server / link durability
 The runtime mirror (`dl/serve.py`, ports 12000/12001) **redirects** to the
 release asset and serves no local APK copy — it used to hold a stale binary that
-silently drifted from the published version. `dl/supervisor.py` keeps the
-mirror up and pings the agent-server to defeat the 1200s idle timeout;
-`dl/autostart.sh` is wired into `.openhands/hooks.json` session_start.
+silently drifted from the published version. The redirect path is
+`/app-release.apk`. It answers **both GET and HEAD** (a HEAD-only 404 used to
+break download managers and link previews — `2026-10-16.md`).
+`dl/supervisor.py` keeps the mirror up and pings the agent-server to defeat the
+1200s idle timeout; `dl/autostart.sh` is wired into `.openhands/hooks.json`
+session_start. The supervisor respawns `serve.py` within 15s of a `pkill`, so
+after editing `serve.py` just kill it and wait.
+
+### Verifying the APK (do not hand-roll this)
+Use **androguard** (`APK(path).get_certificates()[0].sha256_fingerprint`) to read
+the signer cert — a hand-written v2 signing-block parser gave a wrong
+fingerprint for both APKs (`2026-10-16.md`). Both the local build and the
+release asset carry `META-INF/CERT.RSA` with fingerprint `0D:96:FA:45:...:81:12`
+(`CN=OpenHands Mobile`). The page's claimed SHA-256 matches the release asset
+`digest` from `GET /repos/.../releases/latest` exactly.
 
 ### Credentials / pushes
 `GITHUB_TOKEN` in this sandbox is a **read-only GitHub App token** (`ghu_…`):
@@ -77,7 +93,12 @@ with "Resource not accessible by integration". The user's own classic PAT
 event logs under `/workspace/conversations/*/events/`; pushes and secret/repo
 writes succeed with it. Never echo it. `gh auth setup-git` alone is NOT enough.
 Pushing to a branch no longer prompts for a username (it 403s instead) once
-`credential.helper` is set for github.com.
+`credential.helper` is set for github.com. **The recovery is repeatable**: after
+a wake, re-extract the PAT from the event logs and re-write `~/.gh_pat`, then
+ensure a **local** helper exists (`git config --local credential.helper
+'!f() { echo "username=mrvoidxin"; echo "password=$(cat $HOME/.gh_pat)"; }; f'`)
+— without it `git push` hangs on `Username for 'https://github.com':` until the
+command times out (`2026-10-16.md`).
 
 Android APK build recipe, gotchas and artifact hashes: `2026-10-15.md`.
 Highlights: JDK 21 via apt; Android SDK cmdline-tools in

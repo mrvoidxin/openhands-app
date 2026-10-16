@@ -109,10 +109,10 @@ backend, and it does not send your data anywhere by itself.
 
 ## Install
 
-> **Upgrading from a build older than v1.27.2?** Uninstall the old app first.
-> Android refuses to install this release over the top because the signing key
-> changed. Your app settings are removed with it, so note your agent server URL
-> before you upgrade.
+> **In-place updates.** Every build from v1.27.2 onward is signed with the same
+> key, which the release workflow pins and verifies before publishing. You can
+> download a new version and install it straight over the old one — no uninstall,
+> no lost settings. See [SIGNING.md](SIGNING.md) for the certificate fingerprint.
 
 1. On your phone, open the [download link](https://github.com/mrvoidxin/openhands-mobile/releases/latest/download/app-release.apk).
 2. If Android asks, allow **install from unknown sources** for your browser or
@@ -196,6 +196,11 @@ VITE_BACKEND_BASE_URL=https://my-server.example.com npm run build:app
 
 The signing keystore is **not** in the repository. It lives only as an
 encrypted GitHub Actions secret, so the private key is never public.
+
+The key is pinned: the release workflow compares the APK's signer against a
+recorded fingerprint and **refuses to publish if it ever changes**, so users
+always get an in-place update. Full detail, including the fingerprint and the
+backup and rotation rules, is in [SIGNING.md](SIGNING.md).
 
 Generate a keystore once, and keep the file backed up somewhere safe — if you
 lose it you can no longer publish updates that install over the existing app:
@@ -294,6 +299,7 @@ APK can never be released by accident.
 | Name | Type | Purpose |
 | --- | --- | --- |
 | `BACKEND_BASE_URL` | Variable | Bakes the agent server URL into the app. |
+| `SIGNING_CERT_SHA256` | Variable | Optional. Overrides the pinned signer fingerprint. Set this only when rotating the key on purpose. |
 | `ANDROID_KEYSTORE_BASE64` | Secret | The signing keystore, base64-encoded. Required to publish. |
 | `ANDROID_KEYSTORE_PASSWORD` | Secret | Keystore store password. |
 | `ANDROID_KEY_PASSWORD` | Secret | Keystore key password. |

@@ -142,6 +142,35 @@ jobs:
             echo "::warning::release APK is UNSIGNED (no keystore secret) - not publishable"
           fi
 
+          # The signing key must never change. Two APKs signed with different
+          # keys are different apps to Android, so a rotated key forces every
+          # user to uninstall first. Pin the fingerprint and refuse to publish
+          # anything else. The fingerprint is public - it ships inside every
+          # APK - so it is safe to keep in the repository. Override with the
+          # SIGNING_CERT_SHA256 variable only when rotating on purpose.
+          EXPECTED="${{ vars.SIGNING_CERT_SHA256 }}"
+          if [ -z "$EXPECTED" ]; then
+            EXPECTED="0D:96:FA:45:8C:34:42:D2:28:AC:C8:56:97:04:10:4A:4E:83:44:3A:68:0E:DF:81:C6:AE:0D:D1:6D:DA:81:12"
+          fi
+
+          if [ "$KEYSTORE_WAS_RESTORED" = "true" ]; then
+            # apksigner prints the digest as bare hex, keytool as hex separated
+            # by colons. Accept either, then normalise to the colons form.
+            RAW=$(printf '%s' "$certs" | grep -oE '([0-9A-Fa-f]{2}:){31}[0-9A-Fa-f]{2}|[0-9A-Fa-f]{64}' | head -1)
+            if [ -z "$RAW" ]; then
+              echo "::error::could not read the signer fingerprint from the APK"
+              exit 1
+            fi
+            ACTUAL=$(printf '%s' "$RAW" | tr -d ':' | tr 'a-f' 'A-F' | sed 's/\(..\)/\1:/g; s/:$//')
+            echo "signer fingerprint : $ACTUAL"
+            echo "expected fingerprint: $EXPECTED"
+            if [ "$ACTUAL" != "$EXPECTED" ]; then
+              echo "::error::SIGNING KEY CHANGED. The APK is signed with a different key than the pinned fingerprint. Publishing this would force every existing user to uninstall. If the rotation is intentional, update SIGNING.md and set the SIGNING_CERT_SHA256 repository variable."
+              exit 1
+            fi
+            echo "signing key matches the pinned fingerprint - in-place updates stay possible"
+          fi
+
           sha256sum "$APK"
           ls -l "$APK"
 

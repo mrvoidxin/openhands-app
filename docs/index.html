@@ -38,7 +38,7 @@
   "description": "OpenHands Agent Canvas packaged as a native Android app. Runs AI coding agents from a phone against your own OpenHands backend.",
   "operatingSystem": "Android 6.0+ (API 23)",
   "applicationCategory": "DeveloperApplication",
-  "softwareVersion": "1.27.2",
+  "softwareVersion": "1.27.3",
   "fileSize": "6.0 MB",
   "downloadUrl": "https://github.com/mrvoidxin/openhands-mobile/releases/latest/download/app-release.apk",
   "installUrl": "https://github.com/mrvoidxin/openhands-mobile/releases/latest/download/app-release.apk",
@@ -876,7 +876,7 @@ code,pre{font-family:var(--font-mono)}
         </div>
 
         <ul class="chips" id="h-chips">
-          <li class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v18M3 12h18" opacity=".4"/><circle cx="12" cy="12" r="9"/></svg>v1.27.2</li>
+          <li class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v18M3 12h18" opacity=".4"/><circle cx="12" cy="12" r="9"/></svg>v1.27.3</li>
           <li class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></svg>Android 6.0+</li>
           <li class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3 4 6v6c0 5 3.4 8.2 8 9 4.6-.8 8-4 8-9V6l-8-3Z"/></svg>INTERNET only</li>
           <li class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>No account</li>
@@ -1101,8 +1101,8 @@ code,pre{font-family:var(--font-mono)}
       <div class="warn reveal">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="M12 3 2 20h20L12 3Z"/><path d="M12 9v5m0 3h.01"/></svg>
         <div>
-          <h4>Upgrading from an older build?</h4>
-          <p>A build older than v1.27.2 cannot be updated in place, because the signing key changed. Uninstall the old app first. Note your server URL before you do, and reconnect after.</p>
+          <h4>Updates install in place</h4>
+          <p>From v1.27.2 on, every build is signed with the same key, and the release is checked against it before publishing. Download a newer version and install it straight over the old one - no uninstall, no lost settings. Only builds from before v1.27.2 need a one-time uninstall.</p>
         </div>
       </div>
     </div>
@@ -1121,10 +1121,10 @@ code,pre{font-family:var(--font-mono)}
     <div class="hashgrid stagger">
       <div class="hashcard">
         <p class="hash-k">APK SHA-256</p>
-        <p class="hash-meta">6,257,708 bytes · app-release.apk</p>
+        <p class="hash-meta">6,456,583 bytes · app-release.apk</p>
         <div class="hashrow">
-          <code>f7a5805bc588370c7f4aa858ff8721f931ba67c611a282186ca8b0754c460613</code>
-          <button class="copy" data-copy="f7a5805bc588370c7f4aa858ff8721f931ba67c611a282186ca8b0754c460613" aria-label="Copy the APK SHA-256 hash">
+          <code>5640e965f98712bc4967c576e242af250b3f066a80ec693bc346511ce3fcbf62</code>
+          <button class="copy" data-copy="5640e965f98712bc4967c576e242af250b3f066a80ec693bc346511ce3fcbf62" aria-label="Copy the APK SHA-256 hash">
             <span class="cb-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg></span>
             <span class="cb-text">Copy</span>
           </button>
@@ -1184,7 +1184,7 @@ code,pre{font-family:var(--font-mono)}
             <span class="cb-text">Copy</span>
           </button>
         </div>
-        <p class="panel-note">Expect <code>package: name='dev.openhands.agentcanvas'</code> and <code>versionName='1.27.2'</code>.</p>
+        <p class="panel-note">Expect <code>package: name='dev.openhands.agentcanvas'</code> and <code>versionName='1.27.3'</code>.</p>
       </div>
     </div>
   </div>
@@ -1200,7 +1200,7 @@ code,pre{font-family:var(--font-mono)}
 
     <div class="specgrid reveal" id="specgrid">
       <div class="spec"><span class="spec-k">Android version</span><span class="spec-v"><span data-count="6.0" data-decimals="1">6.0</span> (API 23) or newer</span></div>
-      <div class="spec"><span class="spec-k">Version</span><span class="spec-v">1.27.2</span></div>
+      <div class="spec"><span class="spec-k">Version</span><span class="spec-v">1.27.3</span></div>
       <div class="spec"><span class="spec-k">Package</span><span class="spec-v"><code>dev.openhands.agentcanvas</code></span></div>
       <div class="spec"><span class="spec-k">Architecture</span><span class="spec-v">Universal, all ABIs</span></div>
       <div class="spec"><span class="spec-k">Permissions</span><span class="spec-v">INTERNET only</span></div>
@@ -1344,7 +1344,7 @@ code,pre{font-family:var(--font-mono)}
 </footer>
 
 <div class="stickybar" id="stickybar">
-  <div class="bar-meta"><span>v1.27.2 · 6.0 MB</span><span>Android 6.0+</span></div>
+  <div class="bar-meta"><span>v1.27.3 · 6.0 MB</span><span>Android 6.0+</span></div>
   <a class="btn btn-primary" href="https://github.com/mrvoidxin/openhands-mobile/releases/latest/download/app-release.apk">
     Download APK
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 19h16"/></svg>

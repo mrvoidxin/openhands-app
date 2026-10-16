@@ -141,3 +141,20 @@ with `nohup ... &` and poll).
   POST `/api/bash/execute_bash_command` with header `X-Session-API-Key`.
 - **`.openhands/memory/` is tracked in git**, so switching branches
   (`git checkout -B x origin/main`) reverts uncommitted memory edits.
+
+## Landing page (docs/index.html) - 2026-10-16
+- Live at https://mrvoidxin.github.io/openhands-mobile/ ; deployed from `docs/`
+  (Pages = main branch /docs). Source of truth = `docs/index.html`, one
+  self-contained file, ~94.8 KB, inline CSS/JS, inline SVG icons.
+- `docs/.nojekyll` is required or Pages skips the `assets/` directory.
+- Assets referenced: `assets/favicon.png`, `assets/og-image.png`,
+  `assets/badge_obtainium.png`, `assets/upi-qr.png`.
+- **Animation lessons (expensive):** staged entrances must use CSS keyframes +
+  `animation-delay` + `fill-mode: backwards`, NOT transitions driven by a class
+  toggle - the latter collapses into a jump depending on paint timing. Every
+  animated pre-state must be scoped to a class the script adds (`html.anim`,
+  `.intro`), or a JS failure leaves content permanently hidden. Hover lifts on
+  stagger children must use the `translate` property, because
+  `.stagger.is-in>*{transform:none}` overrides `transform`.
+- Known mismatch: the page advertises v1.27.2 / SHA f7a5805b... but the latest
+  release is v1.27.3 and the `releases/latest` APK link serves v1.27.3.

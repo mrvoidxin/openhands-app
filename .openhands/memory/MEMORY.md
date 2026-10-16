@@ -36,20 +36,16 @@ download, install, build-from-source, and CI. Full gotchas in `2026-10-15.md`.
 
 **The `apksigner` PATH trap (cost a whole release cycle):** apksigner is a shell
 wrapper that `exec java`, so a CI step must `export PATH="$JAVA_HOME/bin:$PATH"`
-before calling it. Without that the wrapper dies silently, `grep -q "Signer #1"`
+before calling it. Otherwise the wrapper dies silently, `grep -q "Signer #1"`
 matches nothing, and the workflow labels a perfectly signed release "NOT signed".
-The verify step now exports PATH, falls back to `keytool -printcert -jarfile`,
-and hard-fails when the keystore was restored but the APK is unsigned. To check
-signedness locally with no JDK: `META-INF/CERT.RSA` in the zip plus the
-`APK Sig Block 42` magic prove v1+v2; `openssl pkcs7 -print_certs` + `openssl
-x509 -fingerprint -sha256` print the signer fingerprint.
+With no JDK, check signedness via `META-INF/CERT.RSA` in the zip + the
+`APK Sig Block 42` magic.
 
-**Official branding:** every launcher icon (legacy/adaptive/round, mdpi..xxxhdpi)
-and all 11 splash screens come from the official mark
-(`public/android-chrome-512x512.png`) via `tools/make_android_icons.py`; the
-landing page/README carry a Credits section, and `docs/assets/og-preview.png`
-(1200x630, `tools/make_og_image.py`) is the WhatsApp/OG preview. `cap sync` does
-not overwrite `android/app/src/main/res`, so icons survive CI.
+**Branding:** every launcher icon (legacy/adaptive/round, mdpi..xxxhdpi) and all
+11 splash screens derive from `public/android-chrome-512x512.png` via
+`tools/make_android_icons.py`; `docs/assets/og-preview.png` (1200x630,
+`tools/make_og_image.py`) is the OG preview. `cap sync` does not overwrite
+`android/app/src/main/res`, so icons survive CI.
 
 ### Signing (do not regress this)
 The keystore and its password were **committed publicly** (`android/app/
@@ -137,10 +133,5 @@ so the app shows its own backend setup screen; `signingConfigs` must precede
 - Only *bash* activity resets the idle timer. `SESSION_API_KEY` lives in
   `/proc/1/environ`; `OH_INTERNAL_SERVER_URL` is `http://127.0.0.1:60000`.
   POST `/api/bash/execute_bash_command` with header `X-Session-API-Key`.
-- **Tokens:** the `ghu_...` GITHUB_TOKEN is READ-ONLY (403 on every write,
-  incl. `POST /releases` and `git push`). A **classic PAT with `repo` scope
-  works** — saved at `~/.gh_pat` (chmod 600). Use it via a git credential helper
-  reading the file, never inline on the command line. If a push is denied,
-  check whether the old token is embedded in the remote URL.
 - **`.openhands/memory/` is tracked in git**, so switching branches
   (`git checkout -B x origin/main`) reverts uncommitted memory edits.

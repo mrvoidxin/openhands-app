@@ -14,7 +14,7 @@ import socketserver
 PORT = int(os.environ.get("APK_PORT") or os.environ.get("PORT") or "12000")
 ROOT = os.path.dirname(os.path.abspath(__file__))
 
-RELEASE = "https://github.com/mrvoidxin/openhands-mobile/releases/latest/download"
+RELEASE = "https://github.com/mrvoidxin/openhands-app/releases/latest/download"
 
 INDEX = """<!doctype html>
 <html lang="en">

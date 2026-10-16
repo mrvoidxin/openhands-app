@@ -7,10 +7,10 @@ aur kaise release hota hai.
 
 Seedha signed APK download karein:
 
-**<https://github.com/mrvoidxin/openhands-mobile/releases/latest/download/app-release.apk>**
+**<https://github.com/mrvoidxin/openhands-app/releases/latest/download/app-release.apk>**
 
 Install steps aur checksums ke liye repo ka [README](../../README.md) ya
-landing page <https://mrvoidxin.github.io/openhands-mobile/> dekhein.
+landing page <https://mrvoidxin.github.io/openhands-app/> dekhein.
 
 > Note: Ye ek **signed release APK** hai, debug build nahi. App khud kuch
 > download nahi karta — ye sirf ek client hai jo aapke apne OpenHands agent

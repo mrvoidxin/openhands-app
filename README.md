@@ -6,11 +6,11 @@
 
 Run and supervise your AI coding agents from your phone.
 
-[![Download APK](https://img.shields.io/badge/Download-APK-6c5ce7?style=for-the-badge&logo=android&logoColor=white)](https://github.com/mrvoidxin/openhands-mobile/releases/latest/download/app-release.apk)
-[![Website](https://img.shields.io/badge/Website-openhands--mobile-FF6A3D?style=for-the-badge&logo=githubpages&logoColor=white)](https://mrvoidxin.github.io/openhands-mobile/)
-[![Version](https://img.shields.io/badge/version-1.27.3-blue?style=for-the-badge)](https://github.com/mrvoidxin/openhands-mobile/releases/tag/v1.27.3)
-[![Build](https://github.com/mrvoidxin/openhands-mobile/actions/workflows/build-android-apk.yml/badge.svg)](https://github.com/mrvoidxin/openhands-mobile/actions/workflows/build-android-apk.yml)
-[![License: MIT](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)](https://github.com/mrvoidxin/openhands-mobile/blob/main/LICENSE)
+[![Download APK](https://img.shields.io/badge/Download-APK-6c5ce7?style=for-the-badge&logo=android&logoColor=white)](https://github.com/mrvoidxin/openhands-app/releases/latest/download/app-release.apk)
+[![Website](https://img.shields.io/badge/Website-openhands--app-FF6A3D?style=for-the-badge&logo=githubpages&logoColor=white)](https://mrvoidxin.github.io/openhands-app/)
+[![Version](https://img.shields.io/badge/version-1.27.3-blue?style=for-the-badge)](https://github.com/mrvoidxin/openhands-app/releases/tag/v1.27.3)
+[![Build](https://github.com/mrvoidxin/openhands-app/actions/workflows/build-android-apk.yml/badge.svg)](https://github.com/mrvoidxin/openhands-app/actions/workflows/build-android-apk.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)](https://github.com/mrvoidxin/openhands-app/blob/main/LICENSE)
 [![Support via UPI](https://img.shields.io/badge/Support-UPI-ff9f1c?style=for-the-badge&logo=buymeacoffee&logoColor=white)](#support-this-project)
 
 </div>
@@ -23,9 +23,9 @@ Run and supervise your AI coding agents from your phone.
 
 | Build | Size | Link |
 | --- | --- | --- |
-| **Release (signed)** | 6.0 MB | **[app-release.apk](https://github.com/mrvoidxin/openhands-mobile/releases/latest/download/app-release.apk)** |
+| **Release (signed)** | 6.0 MB | **[app-release.apk](https://github.com/mrvoidxin/openhands-app/releases/latest/download/app-release.apk)** |
 
-All builds: [Releases page](https://github.com/mrvoidxin/openhands-mobile/releases)
+All builds: [Releases page](https://github.com/mrvoidxin/openhands-app/releases)
 
 > **Upgrading from a build older than v1.27.2?** That version was signed with a
 > different key, so Android will not install this over the top. Uninstall the old
@@ -36,7 +36,7 @@ The debug build is a debuggable APK and is not published as a download. It is
 available as a CI workflow artifact to signed-in users.
 
 There is also a landing page with install steps and checksums:
-**<https://mrvoidxin.github.io/openhands-mobile/>**
+**<https://mrvoidxin.github.io/openhands-app/>**
 
 ### Get automatic updates with Obtainium
 
@@ -44,13 +44,13 @@ This app is not on the Play Store. To get notified about new versions, add it to
 [Obtainium](https://github.com/ImranR98/Obtainium) — a free, open-source app that
 installs and updates apps straight from their GitHub releases.
 
-[![Get it on Obtainium](docs/assets/badge_obtainium.png)](https://apps.obtainium.imranr.dev/redirect?r=obtainium%3A%2F%2Fapp%2F%7B%22id%22%3A%22dev.openhands.agentcanvas%22%2C%22url%22%3A%22https%3A%2F%2Fgithub.com%2Fmrvoidxin%2Fopenhands-mobile%22%2C%22author%22%3A%22mrvoidxin%22%2C%22name%22%3A%22OpenHands%20Mobile%22%7D)
+[![Get it on Obtainium](docs/assets/badge_obtainium.png)](https://apps.obtainium.imranr.dev/redirect?r=obtainium%3A%2F%2Fapp%2F%7B%22id%22%3A%22dev.openhands.agentcanvas%22%2C%22url%22%3A%22https%3A%2F%2Fgithub.com%2Fmrvoidxin%2Fopenhands-app%22%2C%22author%22%3A%22mrvoidxin%22%2C%22name%22%3A%22OpenHands%20Mobile%22%7D)
 
 Tap the badge on your phone and Obtainium fills in the details for you. Or add
 this URL by hand:
 
 ```
-https://github.com/mrvoidxin/openhands-mobile
+https://github.com/mrvoidxin/openhands-app
 ```
 
 ### Verify your download
@@ -114,7 +114,7 @@ backend, and it does not send your data anywhere by itself.
 > download a new version and install it straight over the old one — no uninstall,
 > no lost settings. See [SIGNING.md](SIGNING.md) for the certificate fingerprint.
 
-1. On your phone, open the [download link](https://github.com/mrvoidxin/openhands-mobile/releases/latest/download/app-release.apk).
+1. On your phone, open the [download link](https://github.com/mrvoidxin/openhands-app/releases/latest/download/app-release.apk).
 2. If Android asks, allow **install from unknown sources** for your browser or
    file manager. (Settings → Apps → Special access → Install unknown apps.)
 3. Open the downloaded APK and tap **Install**.
@@ -181,8 +181,8 @@ You need Node.js 24+, JDK 21, and the Android SDK.
 
 ```bash
 # 1. Get the code
-git clone https://github.com/mrvoidxin/openhands-mobile.git
-cd openhands-mobile/OpenHands-main
+git clone https://github.com/mrvoidxin/openhands-app.git
+cd openhands-app/OpenHands-main
 
 # 2. Install dependencies
 npm ci
@@ -375,7 +375,7 @@ Not everyone can or should send money. These help just as much:
 
 - **Star this repository** so more people can find it.
 - **Report a bug** or suggest an improvement in
-  [Issues](https://github.com/mrvoidxin/openhands-mobile/issues).
+  [Issues](https://github.com/mrvoidxin/openhands-app/issues).
 - **Tell someone** who would find a mobile OpenHands client useful.
 - **Contribute** a fix or a feature through a pull request.
 
@@ -404,7 +404,7 @@ Hands AI. If you want the official product, see
 
 <div align="center">
 
-**[Download the latest APK](https://github.com/mrvoidxin/openhands-mobile/releases/latest/download/app-release.apk)**
+**[Download the latest APK](https://github.com/mrvoidxin/openhands-app/releases/latest/download/app-release.apk)**
 
 If it helped you, you can [buy me a chai ☕](#support-this-project) — but only if you want to.
 

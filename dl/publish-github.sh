@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Publish a built APK as a GitHub Release on mrvoidxin/openhands-mobile.
+# Publish a built APK as a GitHub Release on mrvoidxin/openhands-app.
 #
 # GitHub Release asset URLs are permanent and public, so this is the durable
 # "never goes down" host. It needs a token that can write Releases.
@@ -11,7 +11,7 @@
 #   GH_PAT=<token-with-repo-scope> bash publish-github.sh v1.27.2
 set -u
 
-REPO="mrvoidxin/openhands-mobile"
+REPO="mrvoidxin/openhands-app"
 TAG="${1:-}"
 if [ -z "$TAG" ]; then
   echo "usage: GH_PAT=<token> bash publish-github.sh <tag>   e.g. v1.27.2" >&2

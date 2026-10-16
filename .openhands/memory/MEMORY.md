@@ -21,10 +21,18 @@ It is fully self-contained (only the `docs/assets/*.png`). **Do not expect
 headless Chromium to verify its scroll/motion** — rAF advances one frame and
 smooth scrolling never animates under `--virtual-time-budget`; see the daily log
 for what can and cannot be tested that way. It was **rebuilt** on 2026-10-16
-(nav > hero > product > features > install > verify > requirements > faq >
-support > footer, UPI QR in support); see `2026-10-16.md` for the layout and the
-real-browser bugs it fixed. **Pages source is `main:/docs`, `legacy` build** —
-pushing to `main` is the deploy, no workflow involved.
+(nav > hero > overview > features > install > verify > requirements > faq >
+support > footer, plus a mobile sticky download bar) and then extended with the
+brief's part two. See `2026-10-16.md` for the layout decisions, the reusable
+patterns (copy buttons, tab underline, count-up via a `revealed` event, FAQ
+height animation, no-JS fallback) and the real-browser bugs each round fixed.
+**Pages source is `main:/docs`, `legacy` build** — pushing to `main` is the
+deploy, no workflow involved.
+
+**Version mismatch to remember:** the landing page's Verify section quotes the
+brief's v1.27.2 facts (6,257,708 bytes, SHA `f7a5805b…0613`), while the live
+release is v1.27.3 (6,456,583 bytes, `5640e965…`). The user chose to keep the
+brief's numbers; re-check this before "fixing" anything in Verify.
 
 **Permanent download links (GitHub Releases, never goes down):**
 https://github.com/mrvoidxin/openhands-mobile/releases/latest/download/app-release.apk

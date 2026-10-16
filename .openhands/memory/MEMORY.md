@@ -1,181 +1,143 @@
 # Project memory
 
-Detail lives in the daily logs; this file is the index. The workspace was
-reused: entries about `ytkit-android` / `dl-service` belong to an older project
-and are archived in `2026-10-11-ytkit-archive.md`. Verify paths before trusting
-any memory.
+Detail lives in the daily logs (`2026-10-15.md`, `2026-10-16.md`); this file is the
+index. The workspace was reused: entries about `ytkit-android` / `dl-service` belong
+to an older project and are archived in `2026-10-11-ytkit-archive.md`. Verify paths
+before trusting any memory.
 
 ## Current project: `openhands-mobile`
-OpenHands Agent Canvas React/TS frontend (`@openhands/agent-canvas` v1.27.1)
-packaged for Android with Capacitor. The repo now tracks `OpenHands-main/`
-(source + the generated `android/` project) so CI can build it.
+OpenHands Agent Canvas React/TS frontend (`@openhands/agent-canvas`) packaged for
+Android with Capacitor. The repo tracks `OpenHands-main/` (source + the generated
+`android/` project) so CI can build it.
 
-**Repo was renamed** from `opanhand-mobile-` (typo) to `openhands-mobile`; the
-local folder matches. Old URLs 301-redirect. Repo `homepage` + topics are set;
-GitHub Pages serves `docs/` at https://mrvoidxin.github.io/openhands-mobile/ .
-**IzzyOnDroid is a dead end** (their policy rejects LLM front-ends) — distribute
-via GitHub Releases + an Obtainium badge instead. Details in `2026-10-15.md`.
+- **Repo was renamed** from `opanhand-mobile-` (typo) to `openhands-mobile`; the
+  local folder matches. Old URLs 301-redirect.
+- Landing page: https://mrvoidxin.github.io/openhands-mobile/ , served by GitHub
+  Pages from `main:/docs` (legacy build) - **pushing to `main` is the deploy**, no
+  workflow involved. `docs/.nojekyll` is required or Pages skips `assets/`.
+- **Permanent download link (never goes down):**
+  https://github.com/mrvoidxin/openhands-mobile/releases/latest/download/app-release.apk
+- **IzzyOnDroid is a dead end** (their policy rejects LLM front-ends). Distribute via
+  GitHub Releases + an Obtainium badge instead.
+- Current release **v1.27.3**: 6,456,583 bytes, SHA-256
+  `5640e965f98712bc4967c576e242af250b3f066a80ec693bc346511ce3fcbf62`, signer
+  `0D:96:FA:45:...:DA:81:12`. All three verified against the live asset on
+  2026-10-16. The landing page quotes these; keep them in sync.
+- **The published APK is built by CI, never locally**, and Android CI builds are
+  **not byte-reproducible** - same commit gives a different SHA-256. So the
+  documented hash must be refreshed after every publish. Release assets change only
+  on a `v*` tag push: never re-tag an existing version, bump `versionCode`/`versionName`.
 
-`docs/index.html` is a hand-written, animation-heavy single-file landing page.
-It is fully self-contained (only the `docs/assets/*.png`). **Do not expect
-headless Chromium to verify its scroll/motion** — rAF advances one frame and
-smooth scrolling never animates under `--virtual-time-budget`; see the daily log
-for what can and cannot be tested that way. It was **rebuilt** on 2026-10-16
-(nav > hero > overview > features > install > verify > requirements > faq >
-support > footer, plus a mobile sticky download bar) and then extended with the
-brief's part two. See `2026-10-16.md` for the layout decisions, the reusable
-patterns (copy buttons, tab underline, count-up via a `revealed` event, FAQ
-height animation, no-JS fallback) and the real-browser bugs each round fixed.
-**Pages source is `main:/docs`, `legacy` build** — pushing to `main` is the
-deploy, no workflow involved.
+### Signing (do not regress - explicit user requirement)
+Every future APK must be signed with the same key so users update in place and never
+uninstall. The keystore and password were once committed publicly; both were removed
+and the app **re-signed with a new key**, so v1.27.2 does NOT install over older
+builds (one-time uninstall for those). `build.gradle` reads
+`OPENHANDS_KEYSTORE_PASSWORD` / `_KEY_PASSWORD` / `_KEY_ALIAS` from the environment
+and only signs when a keystore file exists. CI restores the keystore from the
+`ANDROID_KEYSTORE_BASE64` secret and **gates the publish step on it being present**,
+so an unsigned APK can never be released. `SIGNING.md` documents it.
 
-**Version mismatch to remember:** the landing page's Verify section quotes the
-brief's v1.27.2 facts (6,257,708 bytes, SHA `f7a5805b…0613`), while the live
-release is v1.27.3 (6,456,583 bytes, `5640e965…`). The user chose to keep the
-brief's numbers; re-check this before "fixing" anything in Verify.
-
-**Permanent download links (GitHub Releases, never goes down):**
-https://github.com/mrvoidxin/openhands-mobile/releases/latest/download/app-release.apk
-— release tag `v1.27.3` (current). The debug APK is **no longer published** (it
-is a debuggable build); it only exists as a CI artifact. CI workflow at the
-**repo root** (`.github/workflows/build-android-apk.yml`) builds the APK and
-attaches it to the release on a `v*` tag. The repo home page (README) documents
-download, install, build-from-source, and CI. Full gotchas in `2026-10-15.md`.
-
-**The `apksigner` PATH trap (cost a whole release cycle):** apksigner is a shell
-wrapper that `exec java`, so a CI step must `export PATH="$JAVA_HOME/bin:$PATH"`
-before calling it. Otherwise the wrapper dies silently, `grep -q "Signer #1"`
-matches nothing, and the workflow labels a perfectly signed release "NOT signed".
-With no JDK, check signedness via `META-INF/CERT.RSA` in the zip + the
-`APK Sig Block 42` magic.
-
-**Branding:** every launcher icon (legacy/adaptive/round, mdpi..xxxhdpi) and all
-11 splash screens derive from `public/android-chrome-512x512.png` via
-`tools/make_android_icons.py`; `docs/assets/og-preview.png` (1200x630,
-`tools/make_og_image.py`) is the OG preview. `cap sync` does not overwrite
-`android/app/src/main/res`, so icons survive CI.
-
-### Signing (do not regress this)
-The keystore and its password were **committed publicly** (`android/app/
-release.keystore` + `storePassword 'openhands'` in build.gradle). Both were
-removed and the app was **re-signed with a new key**, so v1.27.2 does NOT
-install over older builds — users must uninstall first. `build.gradle` now reads
-`OPENHANDS_KEYSTORE_PASSWORD` / `_KEY_PASSWORD` / `_KEY_ALIAS` from the
-environment and only signs when a keystore file exists. CI restores the keystore
-from the `ANDROID_KEYSTORE_BASE64` secret and **gates the publish step on that
-secret being present**, so an unsigned APK can never be released.
-New signer cert SHA-256: `0D:96:FA:45:...:81:12` (DN `CN=OpenHands Mobile`).
-**The published asset is built by CI, not locally** — its bytes/hash differ from
-a local `assembleRelease`, so read the hash off the release asset, not a local
-build. The CI-built APK is not byte-reproducible (zipalign/signing timestamps),
-so the documented hash must be refreshed after every publish.
-
-### Server / link durability
-The runtime mirror (`dl/serve.py`, ports 12000/12001) **redirects** to the
-release asset and serves no local APK copy — it used to hold a stale binary that
-silently drifted from the published version. The redirect path is
-`/app-release.apk`. It answers **both GET and HEAD** (a HEAD-only 404 used to
-break download managers and link previews — `2026-10-16.md`).
-`dl/supervisor.py` keeps the mirror up and pings the agent-server to defeat the
-1200s idle timeout; `dl/autostart.sh` is wired into `.openhands/hooks.json`
-session_start. The supervisor respawns `serve.py` within 15s of a `pkill`, so
-after editing `serve.py` just kill it and wait.
-
-### Verifying the APK (do not hand-roll this)
-Use **androguard** (`APK(path).get_certificates()[0].sha256_fingerprint`) to read
-the signer cert — a hand-written v2 signing-block parser gave a wrong
-fingerprint for both APKs (`2026-10-16.md`). Both the local build and the
-release asset carry `META-INF/CERT.RSA` with fingerprint `0D:96:FA:45:...:81:12`
-(`CN=OpenHands Mobile`). The page's claimed SHA-256 matches the release asset
-`digest` from `GET /repos/.../releases/latest` exactly.
-
-### Credentials / pushes
-`GITHUB_TOKEN` in this sandbox is a **read-only GitHub App token** (`ghu_…`):
-API reads work, but `git push`, secret writes and repo-settings writes all 403
-with "Resource not accessible by integration". The user's own classic PAT
-(`ghp_…`, full `repo`+`workflow` scope) was recovered from the conversation
-event logs under `/workspace/conversations/*/events/`; pushes and secret/repo
-writes succeed with it. Never echo it. `gh auth setup-git` alone is NOT enough.
-Pushing to a branch no longer prompts for a username (it 403s instead) once
-`credential.helper` is set for github.com. **The recovery is repeatable**: after
-a wake, re-extract the PAT from the event logs and re-write `~/.gh_pat`, then
-ensure a **local** helper exists (`git config --local credential.helper
-'!f() { echo "username=mrvoidxin"; echo "password=$(cat $HOME/.gh_pat)"; }; f'`)
-— without it `git push` hangs on `Username for 'https://github.com':` until the
-command times out (`2026-10-16.md`).
-
-Android APK build recipe, gotchas and artifact hashes: `2026-10-15.md`
-(JDK 21; SDK in `/workspace/tools/android-sdk`, `bin/*` need `chmod +x`;
-`VITE_MOCK_API=false npm run build:app` with `VITE_BACKEND_BASE_URL` UNSET;
-`signingConfigs` before `buildTypes`; keystore is module-relative; run gradle
-with `nohup ... &` and poll).
-
-## Environment (reusable, expensive to rediscover)
-- **Sandbox restarts wipe `/tmp` but keep `/workspace`.** A PAT parked in `/tmp`
-  is gone after a wake, and so is an apt-installed JDK (`/usr/lib/jvm/java-21-*`
-  vanished), which breaks local gradle/apksigner until reinstalled. Prefer
-  `/workspace` for anything durable, and verify signatures with openssl/Python
-  when no JDK is present. The classic PAT is recovered from
-  `/workspace/conversations/<id>/events/*.json` (`grep -l ghp_`).
-- **No `/dev/kvm`** -> the Android emulator is unusable; verify by build +
-  `aapt dump badging` / `apksigner verify` + serving the web bundle in the
-  browser.
-- No `unzip` -> use python `zipfile` or JDK `jar`. No ImageMagick/Inkscape ->
-  `pip install pillow` for icon resizing.
-- Egress works to dl.google.com, services.gradle.org, maven, npm.
-
-## Serving artifacts to the user (self-healing)
-- Host mapping: `https://work-1-<id>.prod-runtime.all-hands.dev/` -> port 12000,
-  `work-2-...` -> 12001. A host returns **502 until a process listens** on its
-  port.
-- The download stack is redundant and self-healing, so the link stays up:
-  `dl/autostart.sh` (idempotent) starts `dl/supervisor.py`, which owns
-  `dl/serve.py` on **both 12000 and 12001**, respawns it if the port dies
-  (15s), pings the runtime to defeat the 1200s idle sleep (240s), and restores
-  APKs from `/workspace/artifacts/openhands-apk/`. `dl/watchdog.sh` restarts
-  the supervisor if it is killed. `.openhands/hooks.json` `session_start` runs
-  autostart after a sandbox wake (installed at BOTH `/workspace/project/` and
-  the repo dir). All four layers were verified by killing things on purpose.
-- Only *bash* activity resets the idle timer. `SESSION_API_KEY` lives in
-  `/proc/1/environ`; `OH_INTERNAL_SERVER_URL` is `http://127.0.0.1:60000`.
-  POST `/api/bash/execute_bash_command` with header `X-Session-API-Key`.
-- **`.openhands/memory/` is tracked in git**, so switching branches
-  (`git checkout -B x origin/main`) reverts uncommitted memory edits.
-
-## Landing page (docs/index.html) - 2026-10-16
-- Live at https://mrvoidxin.github.io/openhands-mobile/ ; deployed from `docs/`
-  (Pages = main branch /docs). Source of truth = `docs/index.html`, one
-  self-contained file, ~94.8 KB, inline CSS/JS, inline SVG icons.
-- `docs/.nojekyll` is required or Pages skips the `assets/` directory.
-- Assets referenced: `assets/favicon.png`, `assets/og-image.png`,
-  `assets/badge_obtainium.png`, `assets/upi-qr.png`.
-- **Animation lessons (expensive):** staged entrances must use CSS keyframes +
-  `animation-delay` + `fill-mode: backwards`, NOT transitions driven by a class
-  toggle - the latter collapses into a jump depending on paint timing. Every
-  animated pre-state must be scoped to a class the script adds (`html.anim`,
-  `.intro`), or a JS failure leaves content permanently hidden. Hover lifts on
-  stagger children must use the `translate` property, because
-  `.stagger.is-in>*{transform:none}` overrides `transform`.
-- Known mismatch: the page advertises v1.27.2 / SHA f7a5805b... but the latest
-  release is v1.27.3 and the `releases/latest` APK link serves v1.27.3.
-
-## Signing key is pinned - updates always install in place (2026-10-16)
-- Repo: `mrvoidxin/openhands-mobile`. Release workflow
-  `.github/workflows/build-android-apk.yml`.
-- **Requirement from the user:** every future APK must be signed with the same
-  key so users update in place and never uninstall. It already was, by
-  accident; now it is enforced.
 - Pinned signer SHA-256 (public, safe in the repo):
   `0D:96:FA:45:8C:34:42:D2:28:AC:C8:56:97:04:10:4A:4E:83:44:3A:68:0E:DF:81:C6:AE:0D:D1:6D:DA:81:12`
-  (self-signed, CN=OpenHands Mobile, valid to 2054-03-02).
-- The CI `Verify the release APK` step compares the built APK's signer to that
-  value and fails the build on mismatch. Override only on a deliberate rotation
-  via the `SIGNING_CERT_SHA256` repository variable.
-- **No JDK in this sandbox**, so no `keytool`. To read an APK's signing cert,
-  unzip `META-INF/CERT.RSA` (PKCS#7) and parse it with Python
-  `cryptography`'s `pkcs7.load_der_pkcs7_certificates`.
-- **Android CI builds are not reproducible** - same commit, different APK
-  SHA-256. Release assets change only on a `v*` tag push, so never re-tag an
-  existing version; bump `versionCode`/`versionName` instead.
-- `SIGNING.md` documents the fingerprint, the enforcement, and the backup and
-  rotation rules. Latest release: v1.27.3, 6,456,583 bytes.
+  (self-signed, `CN=OpenHands Mobile`, valid to 2054-03-02).
+- CI `Verify the release APK` compares the built APK's signer to that value and fails
+  on mismatch. Override only on a deliberate rotation via `SIGNING_CERT_SHA256`.
+
+### Verifying a release (no JDK needed)
+The release APK uses **APK Signature Scheme v2** - there is no `META-INF/*.RSA`, so
+`keytool`/`apksigner` are unnecessary. Parse the APK Signing Block directly: find
+`APK Sig Block 42` before the EOCD, read the `u64` size that precedes the magic, walk
+`[u64 len][u32 id][value]` pairs from `magic - size + 16` to `magic - 8`, take pair id
+`0x7109871A`, then read length-prefixed signers -> signer -> signedData ->
+(digests, certificates) and hash the first cert. (An earlier note blamed a wrong
+fingerprint on hand-rolling; the real bug was the offset math.)
+`GET /repos/mrvoidxin/openhands-mobile/actions/runs` (needs `$GITHUB_TOKEN`) shows CI
+status - a green run on `main` is the proof the APK still builds.
+
+### Credentials / pushes
+`GITHUB_TOKEN` here is a **read-only GitHub App token** (`ghu_...`): API reads work, but
+`git push`, secret writes and repo-settings writes 403 with "Resource not accessible
+by integration". The user's own classic PAT (`ghp_...`, `repo`+`workflow` scope) is
+recovered from the conversation event logs under `/workspace/conversations/*/events/`
+(`grep -l ghp_`). Never echo it. A **local** credential helper is required or
+`git push` hangs on `Username for 'https://github.com':` until timeout:
+`git config --local credential.helper '!f() { echo "username=mrvoidxin"; echo "password=$(cat $HOME/.gh_pat)"; }; f'`
+
+### Serving artifacts to the user (self-healing)
+Host mapping: `https://work-1-<id>.prod-runtime.all-hands.dev/` -> port 12000,
+`work-2-...` -> 12001. A host returns 502 until something listens. `dl/serve.py`
+**redirects** to the release asset (it once held a stale copy that drifted); path
+`/app-release.apk`; answers **both GET and HEAD** (a HEAD-only 404 broke download
+managers). `dl/autostart.sh` (idempotent, wired into `.openhands/hooks.json`
+session_start) starts `dl/supervisor.py`, which owns `serve.py` on both ports,
+respawns it within 15s, pings the runtime to defeat the 1200s idle sleep, and
+`dl/watchdog.sh` restarts the supervisor. Only *bash* activity resets the idle timer.
+
+## Landing page (docs/index.html)
+One hand-written, self-contained file (~95 KB, inline CSS/JS, inline SVG). Sections:
+nav > hero > overview > features > screens > install > verify > requirements > faq >
+support > footer, plus a mobile sticky download bar. Rebuilt 2026-10-16.
+
+- **Animation lessons (expensive):** staged entrances must use CSS keyframes +
+  `animation-delay` + `fill-mode: backwards`, NOT transitions driven by a class
+  toggle (collapses into a jump depending on paint timing). Every animated pre-state
+  must be scoped to a class the script adds (`html.anim`, `.intro`), or a JS failure
+  leaves content permanently hidden. Hover lifts on stagger children must use the
+  `translate` property, because `.stagger.is-in>*{transform:none}` overrides `transform`.
+- **Do not expect headless Chromium to verify scroll/motion** - rAF advances one frame
+  and smooth scrolling never animates under `--virtual-time-budget`. Layout and
+  image-loading checks do work.
+- Verify section quotes the release facts above. Note the brief once specified
+  v1.27.2 numbers; the page now carries the live v1.27.3 ones.
+
+### Screens section (added 2026-10-16)
+- `#screens` sits between `#features` and `#install`; nav link `data-nav="screens"`;
+  later sections renumbered. Assets: `docs/assets/screens/*.webp` (742x1484, 275 KB
+  for four, q86 at 2/3 scale).
+- `.shots` is a CSS grid: a horizontal snap-scroll rail below 980px
+  (`grid-auto-flow:column; grid-auto-columns:78%` + `scroll-snap-type:x mandatory`,
+  scrollbar hidden) and `repeat(4,1fr)` at/above 980px.
+- **Trap:** `repeat(auto-fit,minmax(190px,1fr))` looks fine at 1440px but collapses to
+  ~165px per phone at 768px. Measure 768 and 1024, not just phone and desktop. Also,
+  reusing `.caps` (2-col grid + sticky head) squeezed the shots into 620px - wide
+  content sections need a plain full-width `.container` + `.sec-head`.
+
+## Capturing real app screens without an emulator
+**The built Capacitor web bundle is committed** at
+`OpenHands-main/android/app/src/main/assets/public/`. Serve that directory and drive it
+with headless Chromium (Playwright) to render the real first-run UI. This is the only
+way to shoot the app here.
+
+- The onboarding wizard is a **transform carousel**: all four slides are in the DOM at
+  `x=50/362/675/988` and the slider carries inline `transform: translateX(...)`; only
+  the active slide is painted. To shoot an inactive step, **clone the slide into a fixed
+  overlay and clear the inline transform** - screenshotting the offscreen node gives a
+  blank frame. Frame the clone (border + footer row) so all captures share one size.
+- A mock `/api/settings` backend did **not** advance the wizard (validation too strict),
+  so only the four setup steps were captured. The section says the fields are blank
+  rather than implying a configured account.
+
+## Environment (reusable, expensive to rediscover)
+- **Sandbox restarts wipe `/tmp` but keep `/workspace`.** A PAT parked in `/tmp` is gone
+  after a wake, and so is an apt-installed JDK. Prefer `/workspace` for anything durable.
+- **No `/dev/kvm`** -> the Android emulator never boots; `screencap` gives black frames
+  even when it does. Verify by build + the web-bundle capture method above.
+- **No JDK in this sandbox**, so `gradle assembleRelease` cannot run locally - never
+  claim a local APK build. Android SDK is at `/workspace/tools/android-sdk`
+  (build-tools 34/35). No `unzip` (use python `zipfile`); no ImageMagick (use Pillow).
+- **The `apksigner` PATH trap (cost a whole release cycle):** apksigner is a shell
+  wrapper that `exec java`, so a CI step must `export PATH="$JAVA_HOME/bin:$PATH"`
+  before calling it, or it dies silently and a signed release gets labelled "NOT signed".
+- Egress works to dl.google.com, services.gradle.org, maven, npm.
+- `.openhands/memory/` is tracked in git, so switching branches reverts uncommitted
+  memory edits.
+
+## Other assets
+- Branding: every launcher icon and all 11 splash screens derive from
+  `public/android-chrome-512x512.png` via `tools/make_android_icons.py`;
+  `docs/assets/og-preview.png` (1200x630) via `tools/make_og_image.py`. `cap sync`
+  does not overwrite `android/app/src/main/res`, so icons survive CI.
+- Promo kit in `docs/promo/` (Instagram carousel + squares + wide banner + captions).
+  Instagram crops a post to a centred 810px band for the profile grid, so keep all
+  content inside it - `shoot.py` asserts this.

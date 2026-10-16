@@ -454,6 +454,29 @@ code,pre{font-family:var(--font-mono)}
   transition:transform .35s var(--ease-out),border-color .3s ease,color .3s ease,background .3s ease;
 }
 .row-arrow svg{width:14px;height:14px}
+
+/* Screens: real captures of the app, shown in their own device frame.
+   Narrow screens get a snap-scroll rail so the shots stay readable. */
+.shots{
+  display:grid;gap:20px;grid-auto-flow:column;grid-auto-columns:78%;
+  overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;
+  padding-bottom:8px;scrollbar-width:none;
+}
+.shots::-webkit-scrollbar{display:none}
+.shot{margin:0;scroll-snap-align:start}
+.shot-frame{
+  position:relative;border:1px solid var(--border);border-radius:22px;overflow:hidden;
+  background:var(--surface);padding:7px;
+}
+.shot-frame img{width:100%;border-radius:16px;background:var(--bg)}
+.shot figcaption{padding:12px 4px 0}
+.shot figcaption b{display:block;font-size:14.5px;font-weight:600;letter-spacing:-.01em}
+.shot figcaption span{display:block;margin-top:3px;font-size:13px;color:var(--text-muted);line-height:1.45}
+.shot-note{
+  margin-top:22px;border:1px solid var(--border);background:var(--surface);
+  border-radius:var(--radius);padding:15px 18px;color:var(--text-muted);font-size:14px;line-height:1.55;
+}
+.shot-note b{color:var(--text);font-weight:600}
 @media (hover:hover){
   .row:hover{background:rgba(255,255,255,.018)}
   .row:hover .row-arrow{transform:rotate(90deg);border-color:rgba(124,140,255,.45);color:var(--accent);background:rgba(124,140,255,.08)}
@@ -731,6 +754,7 @@ code,pre{font-family:var(--font-mono)}
   .specgrid{grid-template-columns:repeat(4,1fr)}
   .section{padding-block:96px}
   .hero{padding-block:76px 52px}
+  .shots{grid-template-columns:repeat(4,1fr);grid-auto-columns:auto;overflow-x:visible}
 }
 
 /* ============================================================
@@ -803,6 +827,7 @@ code,pre{font-family:var(--font-mono)}
 
       <nav class="nav-links" aria-label="Sections">
         <a class="nav-link" href="#features" data-nav="features">Features</a>
+        <a class="nav-link" href="#screens" data-nav="screens">Screens</a>
         <a class="nav-link" href="#install" data-nav="install">Install</a>
         <a class="nav-link" href="#verify" data-nav="verify">Verify</a>
         <a class="nav-link" href="#faq" data-nav="faq">FAQ</a>
@@ -1053,11 +1078,70 @@ code,pre{font-family:var(--font-mono)}
   </div>
 </section>
 
+<!-- ============================ SCREENS ============================ -->
+<section class="section" id="screens" aria-labelledby="screens-h">
+  <div class="container">
+    <div class="sec-head reveal">
+      <p class="eyebrow"><span class="dot" aria-hidden="true"></span>03 · Screens</p>
+      <h2 id="screens-h">The real setup flow, <span class="muted">start to finish.</span></h2>
+      <p class="lead">These are actual captures of the app, not mockups. The first launch walks you through four steps and then hands you a working conversation.</p>
+    </div>
+
+    <div class="shots stagger">
+        <figure class="shot">
+          <div class="shot-frame">
+            <img src="assets/screens/01-backend.webp" width="742" height="1484" loading="lazy" decoding="async"
+                 alt="Add a backend screen with fields for a friendly name, the agent server URL, local or cloud type, and an API key.">
+          </div>
+          <figcaption>
+            <b>1 · Connect</b>
+            <span>Point it at OpenHands Cloud or your own server. A friendly name is enough to start.</span>
+          </figcaption>
+        </figure>
+
+        <figure class="shot">
+          <div class="shot-frame">
+            <img src="assets/screens/02-agent.webp" width="742" height="1484" loading="lazy" decoding="async"
+                 alt="Choose your agent screen listing OpenHands, Claude Code, Codex, Gemini CLI, Pi and OpenCode.">
+          </div>
+          <figcaption>
+            <b>2 · Pick an agent</b>
+            <span>OpenHands by default, or bring Claude Code, Codex, Gemini CLI, Pi or OpenCode.</span>
+          </figcaption>
+        </figure>
+
+        <figure class="shot">
+          <div class="shot-frame">
+            <img src="assets/screens/03-llm.webp" width="742" height="1484" loading="lazy" decoding="async"
+                 alt="Set up your LLM screen for choosing a model provider and model, with a pre-selected default.">
+          </div>
+          <figcaption>
+            <b>3 · Choose a model</b>
+            <span>Pick a provider and model. A sensible default is pre-selected for you.</span>
+          </figcaption>
+        </figure>
+
+        <figure class="shot">
+          <div class="shot-frame">
+            <img src="assets/screens/04-hello.webp" width="742" height="1484" loading="lazy" decoding="async"
+                 alt="Say hello screen with a first-message box and a list of ready-made workflow templates.">
+          </div>
+          <figcaption>
+            <b>4 · Start working</b>
+            <span>Send a first message, or open a proven workflow with its prompt and MCPs already set up.</span>
+          </figcaption>
+        </figure>
+    </div>
+
+    <p class="shot-note reveal"><b>A note on these images.</b> They are captured from the app running with no backend attached, so every field is blank and nothing is pre-filled. That is the honest first-run state. Your own setup will carry your server, your model and your conversations.</p>
+  </div>
+</section>
+
 <!-- ============================ INSTALL ============================ -->
 <section class="section" id="install" aria-labelledby="install-h">
   <div class="container">
     <div class="sec-head reveal">
-      <p class="eyebrow"><span class="dot" aria-hidden="true"></span>03 · Install</p>
+      <p class="eyebrow"><span class="dot" aria-hidden="true"></span>04 · Install</p>
       <h2 id="install-h">Four steps, about a minute.</h2>
     </div>
 
@@ -1113,7 +1197,7 @@ code,pre{font-family:var(--font-mono)}
 <section class="section" id="verify" aria-labelledby="verify-h">
   <div class="container">
     <div class="sec-head reveal">
-      <p class="eyebrow"><span class="dot" aria-hidden="true"></span>04 · Verify</p>
+      <p class="eyebrow"><span class="dot" aria-hidden="true"></span>05 · Verify</p>
       <h2 id="verify-h">Check the file before you trust it.</h2>
       <p class="lead">Compare the hash of the APK you downloaded with the value below. If they match, the file is byte for byte the one that was built and signed.</p>
     </div>
@@ -1194,7 +1278,7 @@ code,pre{font-family:var(--font-mono)}
 <section class="section" id="requirements" aria-labelledby="req-h">
   <div class="container">
     <div class="sec-head reveal">
-      <p class="eyebrow"><span class="dot" aria-hidden="true"></span>05 · Requirements</p>
+      <p class="eyebrow"><span class="dot" aria-hidden="true"></span>06 · Requirements</p>
       <h2 id="req-h">What you need before you start.</h2>
     </div>
 
@@ -1215,7 +1299,7 @@ code,pre{font-family:var(--font-mono)}
 <section class="section" id="faq" aria-labelledby="faq-h">
   <div class="container">
     <div class="sec-head reveal">
-      <p class="eyebrow"><span class="dot" aria-hidden="true"></span>06 · FAQ</p>
+      <p class="eyebrow"><span class="dot" aria-hidden="true"></span>07 · FAQ</p>
       <h2 id="faq-h">Common questions.</h2>
     </div>
 
@@ -1249,7 +1333,7 @@ code,pre{font-family:var(--font-mono)}
   <div class="support-glow" aria-hidden="true"></div>
   <div class="container">
     <div class="sec-head reveal">
-      <p class="eyebrow"><span class="dot" aria-hidden="true"></span>07 · Support</p>
+      <p class="eyebrow"><span class="dot" aria-hidden="true"></span>08 · Support</p>
       <h2 id="support-h">Free forever. <span class="muted">Tips optional.</span></h2>
       <p class="lead">There is no paid tier and nothing is locked. If this saved you some time and you feel like it, you can send a tip. There is no suggested amount.</p>
     </div>

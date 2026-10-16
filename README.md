@@ -127,13 +127,29 @@ backend, and it does not send your data anywhere by itself.
 ## First launch
 
 The app does not know where your agent server lives. On first launch it shows a
-setup screen:
+four-step setup wizard:
 
-1. **Server URL** — the address of your OpenHands agent server, for example
+| 1 · Connect | 2 · Pick an agent |
+| :---: | :---: |
+| <img src="docs/assets/screens/01-backend.webp" alt="Add a backend screen with a friendly name, host URL, local or cloud type, and an API key" width="300"> | <img src="docs/assets/screens/02-agent.webp" alt="Choose your agent screen listing OpenHands, Claude Code, Codex, Gemini CLI, Pi and OpenCode" width="300"> |
+
+| 3 · Choose a model | 4 · Start working |
+| :---: | :---: |
+| <img src="docs/assets/screens/03-llm.webp" alt="Set up your LLM screen for choosing a provider and model" width="300"> | <img src="docs/assets/screens/04-hello.webp" alt="Say hello screen with a first-message box and ready-made workflow templates" width="300"> |
+
+1. **Connect** — the address of your OpenHands agent server, for example
    `https://my-server.example.com` or `http://192.168.1.10:3000` on your home
-   network. Use `https://` for anything reachable over the internet.
-2. **API key** — the key your agent server expects.
-3. Tap **Connect**.
+   network. Use `https://` for anything reachable over the internet. You can
+   point it at OpenHands Cloud instead and connect instantly.
+2. **Pick an agent** — OpenHands by default, or bring your own Claude Code,
+   Codex, Gemini CLI, Pi or OpenCode agent.
+3. **Choose a model** — pick a provider and model. A sensible default is
+   pre-selected.
+4. **Start working** — send a first message, or open a proven workflow template
+   with its prompt and MCPs already set up.
+
+These captures come from the app with no backend attached, so every field is
+blank. Your own setup will carry your server, your model and your conversations.
 
 Your settings are stored on the device. To change them later, open
 **Settings** inside the app.

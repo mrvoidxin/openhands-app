@@ -5,18 +5,22 @@ index. The workspace was reused: entries about `ytkit-android` / `dl-service` be
 to an older project and are archived in `2026-10-11-ytkit-archive.md`. Verify paths
 before trusting any memory.
 
-## Current project: `openhands-mobile`
+## Current project: `openhands-app`
 OpenHands Agent Canvas React/TS frontend (`@openhands/agent-canvas`) packaged for
 Android with Capacitor. The repo tracks `OpenHands-main/` (source + the generated
 `android/` project) so CI can build it.
 
-- **Repo was renamed** from `opanhand-mobile-` (typo) to `openhands-mobile`; the
-  local folder matches. Old URLs 301-redirect.
-- Landing page: https://mrvoidxin.github.io/openhands-mobile/ , served by GitHub
+- **Repo renamed** `opanhand-mobile-` (typo) -> `openhands-mobile` -> **`openhands-app`**
+  (2026-10-16). Local folder is still `openhands-mobile`; remote is
+  `mrvoidxin/openhands-app`. GitHub keeps the old path redirecting temporarily but
+  it is **not instant** - right after the rename the old `github.io` URL still served
+  for a few minutes and the *new* URL briefly served the pre-rename HTML from cache.
+  Re-curl with a cache-buster before concluding a deploy failed.
+- Landing page: https://mrvoidxin.github.io/openhands-app/ , served by GitHub
   Pages from `main:/docs` (legacy build) - **pushing to `main` is the deploy**, no
   workflow involved. `docs/.nojekyll` is required or Pages skips `assets/`.
 - **Permanent download link (never goes down):**
-  https://github.com/mrvoidxin/openhands-mobile/releases/latest/download/app-release.apk
+  https://github.com/mrvoidxin/openhands-app/releases/latest/download/app-release.apk
 - **IzzyOnDroid is a dead end** (their policy rejects LLM front-ends). Distribute via
   GitHub Releases + an Obtainium badge instead.
 - Current release **v1.27.3**: 6,456,583 bytes, SHA-256
@@ -52,7 +56,7 @@ The release APK uses **APK Signature Scheme v2** - there is no `META-INF/*.RSA`,
 `0x7109871A`, then read length-prefixed signers -> signer -> signedData ->
 (digests, certificates) and hash the first cert. (An earlier note blamed a wrong
 fingerprint on hand-rolling; the real bug was the offset math.)
-`GET /repos/mrvoidxin/openhands-mobile/actions/runs` (needs `$GITHUB_TOKEN`) shows CI
+`GET /repos/mrvoidxin/openhands-app/actions/runs` (needs `$GITHUB_TOKEN`) shows CI
 status - a green run on `main` is the proof the APK still builds.
 
 ### Credentials / pushes

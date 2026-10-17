@@ -3,13 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>OpenHands Mobile — Your AI coding agents, in your pocket.</title>
-<meta name="description" content="Run AI coding agents from your phone. OpenHands Agent Canvas as a sideloadable Android APK. Free, MIT licensed, no account, no telemetry.">
+<title>OpenHands Mobile — Run OpenHands on Android (APK Download)</title>
+<meta name="description" content="Run AI coding agents from your phone. The OpenHands Android app, packaged as a sideloadable APK. Free, MIT licensed, no account, no telemetry.">
+<meta name="keywords" content="OpenHands Android app, OpenHands mobile, OpenHands APK, run OpenHands on phone, AI coding agent Android, OpenHands Agent Canvas, sideload APK, self-hosted AI agent">
 <link rel="canonical" href="https://mrvoidxin.github.io/openhands-app/">
 <meta name="theme-color" content="#08080A">
 <meta name="color-scheme" content="dark">
 <meta name="author" content="Sameer (@mrvoidxin)">
-
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<!-- Google Search Console: replace the value below with the token from
+     Search Console > URL prefix property > HTML tag method, then commit.
+     See docs/README-SEO.md for the exact steps. -->
+<meta name="google-site-verification" content="REPLACE_WITH_GOOGLE_SEARCH_CONSOLE_TOKEN">
+<meta property="og:locale" content="en_US">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="OpenHands Mobile">
 <meta property="og:url" content="https://mrvoidxin.github.io/openhands-app/">
@@ -47,6 +53,108 @@
   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
   "license": "https://opensource.org/licenses/MIT",
   "author": { "@type": "Person", "name": "Sameer", "alternateName": "mrvoidxin", "url": "https://github.com/mrvoidxin" }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Is it safe to install?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You are installing a file from GitHub rather than the Play Store, so it is worth checking first. Compare the APK hash with the value in the Verify section, and read the source if you want. The app asks for one permission, INTERNET, and sends nothing anywhere except the backend you configure."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why does Play Protect warn?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Play Protect flags most apps it has not seen before, including ones that are perfectly fine. It means the file was not distributed through Google, not that it is malicious. You can continue past the prompt once you have verified the hash."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is it official?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. This is an independent wrapper built by Sameer (@mrvoidxin). It is not affiliated with or endorsed by the OpenHands team, and it is not the official OpenHands app. The upstream project is separate and has its own releases."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does it work offline?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The app opens and its interface loads without a connection. Anything involving an agent needs a reachable OpenHands backend, so plan on having a network path to your server."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need a Play Store account?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No account is needed and no sign in is asked for. You sideload the APK directly. If you want update notifications without the Play Store, add the repo to Obtainium using the badge on this page."
+      }
+    }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to install OpenHands Mobile on Android",
+  "description": "Install the OpenHands Mobile APK on an Android phone in four steps, about a minute.",
+  "totalTime": "PT1M",
+  "tool": [{ "@type": "HowToTool", "name": "An Android phone running Android 6.0 or newer" }],
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "name": "Download the APK",
+      "text": "Grab app-release.apk from the latest release. It is about 6.0 MB.",
+      "url": "https://mrvoidxin.github.io/openhands-app/#install"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "name": "Allow installs from this source",
+      "text": "Android asks once. Enable it for whichever app is doing the install, usually your browser or file manager.",
+      "url": "https://mrvoidxin.github.io/openhands-app/#install"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "name": "Install and open",
+      "text": "Play Protect may show a prompt for a sideloaded app. If you have checked the hash, choose to install anyway.",
+      "url": "https://mrvoidxin.github.io/openhands-app/#install"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "name": "Connect your backend",
+      "text": "Open the app, enter your OpenHands server URL, and start a conversation.",
+      "url": "https://mrvoidxin.github.io/openhands-app/#install"
+    }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "OpenHands Mobile", "item": "https://mrvoidxin.github.io/openhands-app/" },
+    { "@type": "ListItem", "position": 2, "name": "Install", "item": "https://mrvoidxin.github.io/openhands-app/#install" },
+    { "@type": "ListItem", "position": 3, "name": "FAQ", "item": "https://mrvoidxin.github.io/openhands-app/#faq" }
+  ]
 }
 </script>
 
@@ -977,6 +1085,7 @@ code,pre{font-family:var(--font-mono)}
       <p class="eyebrow"><span class="dot" aria-hidden="true"></span>01 · Overview</p>
       <h2 id="overview-h">A thin shell around a web app. <span class="muted">Nothing hidden.</span></h2>
       <p class="lead">OpenHands Agent Canvas is the web interface for OpenHands, an open-source AI software engineer. This project wraps that interface in a Capacitor shell so it installs and opens like any other Android app. You still point it at your own backend.</p>
+      <p class="lead">In short: this is the <strong>OpenHands Android app</strong>. It is a community-built mobile client for OpenHands — not an official release — and it lets you <strong>run OpenHands on your phone</strong> while the agent keeps working on your own server. If you were looking for an <strong>OpenHands APK</strong> to sideload, this is it.</p>
     </div>
 
     <div class="grid-3 stagger">

@@ -6,6 +6,8 @@
 
 Run and supervise your AI coding agents from your phone.
 
+[![OpenHands Mobile — the OpenHands Android app](docs/promo/banner-wide-1600x900.png)](https://mrvoidxin.github.io/openhands-app/)
+
 [![Download APK](https://img.shields.io/badge/Download-APK-6c5ce7?style=for-the-badge&logo=android&logoColor=white)](https://github.com/mrvoidxin/openhands-app/releases/latest/download/app-release.apk)
 [![Website](https://img.shields.io/badge/Website-openhands--app-FF6A3D?style=for-the-badge&logo=githubpages&logoColor=white)](https://mrvoidxin.github.io/openhands-app/)
 [![Version](https://img.shields.io/badge/version-1.27.3-blue?style=for-the-badge)](https://github.com/mrvoidxin/openhands-app/releases/tag/v1.27.3)
@@ -78,7 +80,7 @@ certificate above — `apksigner verify --print-certs app-release.apk`.
 
 ---
 
-## What is this?
+## What is OpenHands Mobile?
 
 [OpenHands Agent Canvas](https://github.com/OpenHands/OpenHands) is a web UI for
 running AI coding agents. This project wraps that web app in a native Android
@@ -90,6 +92,25 @@ v1.27.1). It is a client — it talks to an OpenHands agent server that you run
 yourself, on your laptop, a server, or in the cloud.
 
 **This is a community packaging, not an official OpenHands release.**
+
+### Run OpenHands on Android, without a laptop
+
+OpenHands has no official mobile app. The Agent Canvas needs Docker and Node.js,
+so it does not run on a phone by itself. This project is the missing piece: it
+takes the Canvas that is already running on your machine and puts a real Android
+app in front of it.
+
+If you searched for **"OpenHands Android app"**, **"OpenHands mobile"**,
+**"OpenHands APK"**, or **"run OpenHands on my phone"** — this is that. You keep
+the agent on real hardware, and you get the controls in your pocket.
+
+| Question | Answer |
+| --- | --- |
+| Is there an official OpenHands mobile app? | No. This is an independent, community-built Android wrapper. |
+| Does the agent run on the phone? | No. The agent runs on your server; the phone is the client. |
+| Do I need a Play Store account? | No. You sideload the APK. |
+| Is it free? | Yes — MIT licensed, no account, no telemetry. |
+| Which Android versions? | 6.0 (Marshmallow, API 23) and newer. |
 
 ---
 

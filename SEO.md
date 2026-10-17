@@ -57,6 +57,45 @@ months. With it, often 2-3 days.
 
 > The verification tag can stay in the page forever. It does not hurt anything.
 
+### If Search Console shows the "HTML file" method instead
+
+Search Console sometimes offers **HTML file** upload rather than the meta tag. Both
+work; pick whichever you like.
+
+**Option A — switch to the meta tag (easiest).** On the verification screen, click
+the arrow next to **HTML file** and choose **HTML tag** instead. Then follow the
+steps above.
+
+**Option B — use the HTML file.** Google gives you a file named something like
+`google1a2b3c4d5e6f7g8h.html`. Its whole contents are one line:
+
+```
+google-site-verification: google1a2b3c4d5e6f7g8h.html
+```
+
+Create that exact file in `docs/` (the folder GitHub Pages publishes), with the
+exact name Google gave you, and commit it:
+
+```bash
+cd docs
+printf 'google-site-verification: google1a2b3c4d5e6f7g8h.html\n' \
+  > google1a2b3c4d5e6f7g8h.html
+git add google1a2b3c4d5e6f7g8h.html
+git commit -m "Add Google Search Console verification file"
+git push
+```
+
+Wait about a minute, then confirm it is live:
+
+```
+https://mrvoidxin.github.io/openhands-app/google1a2b3c4d5e6f7g8h.html
+```
+
+It must return the verification line, not a 404. Then click **Verify**.
+
+> Replace `google1a2b3c4d5e6f7g8h` everywhere with the real name from Google.
+> The file name is different for every property, so copy it exactly.
+
 ### Same steps for Bing (covers DuckDuckGo too)
 
 <https://www.bing.com/webmasters> -> Add site -> import from Google Search
